@@ -1,4 +1,25 @@
 #####################---Enrichments:eRNAs static vs osceRNAs---##############
+columnnames<-c('chr','start','end')
+bedfile<-function(feature, columnnames){
+  colnames(feature) <- c('chr','start','end')
+  bed<-with(feature, GRanges(chr, IRanges(start+1, end)))
+  return(bed)
+}
+
+#Function that gets the index of the bait, whose OE interacts with feature of interest
+retrieveindex_fromchic<-function(bedfile_feature, chic_otherends_bed, chic_bait_bed){
+  t_1<-subjectHits(findOverlaps(bedfile_feature, chic_otherends_bed))
+  #Only the indexes of the baits that overlap with a feature
+  #Retrieve the baits that correspond to the unique indexes of the otherends
+  return(chic_bait_bed[t_1])
+}
+
+
+count_matches_circprom_ernasindexes<-function(ernas_bed, circprom_bed) {
+  t<-findOverlaps(ernas_bed,circprom_bed);
+  t_1<-length(t)
+  return(baits=t_1)
+}
 
 #Create a random set of no osc ernas, keeping the size of osc ernas and see overlap with circprom
 chic<-read.csv("/inputs_for_scripts/All_step2_washU_text_symm.txt", sep = "\t", header = F)
@@ -15,14 +36,17 @@ chic_otherends_bed<-GRanges(seqnames= Rle(chic_otherends[,1]), ranges = IRanges(
 chic_bait_bed<-GRanges(seqnames= Rle(chic_baits[,1]), ranges = IRanges(chic_baits[,2], chic_baits[,3]))
 
 #Bed eRNAs 
-osc_ernas<-read.csv("eRNAs_de_novo_oscillating_phases.txt", header = T, sep = "\t")
+osc_ernas<-read.csv("/inputs_for_scripts/eRNAs_de_novo_oscillating_phases.txt", header = T, sep = "\t")
 osc_ernas<-osc_ernas[,1:3]
 osc_ernas<-bedfile(osc_ernas, columnnames)
 
 ###Control randompicked, use no osc eRNAs
-poolofenas<-bedfile(read.csv("eRNAs_de_novo_oscillating.txt", header = T, sep = "\t"), columnnames)
+poolofenas<-bedfile(read.csv("/inputs_for_scripts/eRNAs_de_novo_oscillating.txt", header = T, sep = "\t"), columnnames)
 noosc_ernas<-poolofenas[!(1:19086 %in% queryHits(findOverlaps(poolofenas, (osc_ernas), type="equal")))]
 
+#Open circproms
+mfm_mrnas<-bedfile(read.csv("/inputs_for_scripts/circproms/HindIIIfragments_circadiangenes_MFMRNAseq_phases.bed", header = F, sep = "\t"))
+mfm_mrnasintrons<-bedfile(read.csv("/inputs_for_scripts/circproms/HindIIIfragments_circadiangenesonlyintrons_MFMRNAseq_phases.bed", header = F, sep = "\t")) 
 
 enrichoverlap_noosc_ernas_to_chicEO<-function(chic_bed_otherends, noosc_ernas, osc_ernas, rep)
 {
@@ -72,17 +96,52 @@ enrichoverlap_noosc_ernas<-function(chic_bed_otherends, noosc_ernas, osc_ernas, 
   )
 }
 #Apply function to calculate the expectd number of interactions between eRNAs and cirpcproms MFM; 100 iterations
-EO_nooscernas_randomset<-enrichoverlap_noosc_ernas(chic_bed_otherends, noosc_ernas, osc_ernas, 100, mfm_mrnasINTRONS)
+EO_nooscernas_randomset<-enrichoverlap_noosc_ernas(chic_bed_otherends, noosc_ernas, osc_ernas, 100, mfm_mrnasintrons)
 #Calculate the mean, sd, higher interval and lower interval for all the iterations
 EO_nooscernas_randomset_mean<-mean(EO_nooscernas_randomset)
 EO_nooscernas_randomset_sd<-sd(EO_nooscernas_randomset)
 EO_nooscernas_randomset_HI<-EO_nooscernas_randomset_mean+EO_nooscernas_randomset_sd
 EO_nooscernas_randomset_LI<-EO_nooscernas_randomset_mean-EO_nooscernas_randomset_sd
 
+
+count_matches_circprom_ernasindexes<-function(ernas_bed, circprom_bed) {
+  t<-findOverlaps(ernas_bed,circprom_bed);
+  t_1<-length(t)
+  return(baits=t_1)
+}
+
+ernaslist<-list("osc_ernas")
+eRNAs_index_baits<-lapply(ernaslist, function(x){
+  tempo<-get(x);
+  tempo<-retrieveindex_fromchic(tempo, chic_otherends_bed, chic_bait_bed)
+})
+circadianprom_ernasbaits_counts<-
+  lapply(circpromlist, function(y){
+    tempo_circ<-get(y);
+    t<-lapply(eRNAs_index_baits, function(x){
+      tempo_ernas<-count_matches_circprom_ernasindexes(x, tempo_circ) 
+      })
+    unlist(t)
+    })
+names(circadianprom_ernasbaits_counts)<-unlist(circpromlist)
+#Plot the results as barpots, obs next to expected  (the height of the bar represents the mean of all the iterations) and the error bar represents the SD
+E_oscernas_nooscernasrandom<-(rbind("nooscenas_observed"=circadianprom_ernasbaits_counts$mfm_mrnasintrons[[1]],"nooscenas_expected"=EO_nooscernas_randomset_mean))
+#svglite::svglite("/Figures/Enrichment/MFMcircpromsINTRONS_oscenras_proms_enrich.svg")
+b<-barplot(t((E_oscernas_nooscernasrandom)),  yaxp=c(0,500, 5), xaxt="n",las=1, main = "MFMcircpromsINTRONS p-value < 2.2e-16", ylab="Interactions with Circadian promoters", xlab = "Oscillatory eRNAs", cex.axis = .9, col = c("gray30","gray88"), beside=T, border="white", cex.lab=.9, space=c(0.1,0), cex.names = .9)
+legend("topright", c("Osc","No Osc"), xpd=T, pch=16 ,col=c("gray30","gray88"), cex = .9, y.intersp=0.5, inset=c(-0.1,0))
+#arrows(b, c(0,EO_nooscernas_randomset_LI), b, c(0,EO_nooscernas_randomset_HI), length=0.5, angle=90, code=3,col = "black")
+#EO_nooscernas_randomset_mean
+error.bar(b, c(0, (EO_nooscernas_randomset_mean)),  c(0,EO_nooscernas_randomset_sd))
+#dev.off()
+#ttest
+t.test(EO_nooscernas_randomset, mu =circadianprom_ernasbaits_counts$mfm_mrnasintrons[[1]] )
+#p-value < 2.2e-16
+
+
 ##################Otherends from differential interactions
 #Run differentialinteractions_adamscript, use all the unique pairs
-load("/inputs_for_scripts/differential_interactions/MFM_RNAseq/MFMcircproms_diffs_readcount_above150kb2018")
-load("/inputs_for_scripts/differential_interactions/MFM_RNAseq/MFMcircproms_diffs_readcount_below150kb2018")
+load("/inputs_for_scripts/differential_interactions/MFMcircproms_diffs_readcount_above150kb2018")
+load("/inputs_for_scripts/differential_interactions/MFMcircproms_diffs_readcount_below150kb2018")
 load("/inputs_for_scripts/circtablesinter")
 
 merge_uniquedifinter<-function(tablecircadianinteractions, outputadamscript){
