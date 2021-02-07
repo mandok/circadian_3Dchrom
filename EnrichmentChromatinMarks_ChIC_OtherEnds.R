@@ -60,27 +60,27 @@ error.bar <- function(x, y, upper, lower=upper, length=0.1,...){
 ###############Open datasets
 
 #CHiC all genes
-chic<-read.csv("All_step2_washU_text_1.txt", header=F, sep=" ")
+chic<-read.csv("/inputs_for_scripts/All_step2_washU_text_1.txt", header=F, sep=" ")
 
 #eRNAs, histone modifications and methylation
-ernas<-read.csv("eRNAs_de_novo_oscillating.txt", header=T, sep="\t") 
-setwd("/hist_met")
-H3K27ac_BR<-read.csv("RenLab-H3K27ac-Liver.peaks", header=F, sep="\t")
+ernas<-read.csv("/inputs_for_scripts/eRNAs_de_novo_oscillating.txt", header=T, sep="\t") 
+
+H3K27ac_BR<-read.csv("/inputs_for_scripts/circmarks/RenLab-H3K27ac-Liver.peaks", header=F, sep="\t")
 H3K27ac_BR<-H3K27ac_BR[,1:3]
-H3K4me1_BR<-read.csv("RenLab-H3K4me1-liver-peaks.txt", header=F, sep="\t")
+H3K4me1_BR<-read.csv("/inputs_for_scripts/circmarks/RenLab-H3K4me1-liver-peaks.txt", header=F, sep="\t")
 H3K4me1_BR<-H3K4me1_BR[,1:3]
-H3K4me3_BR<-read.csv("RenLab-H3K4me3-liver-peaks.txt", header=F, sep="\t")
+H3K4me3_BR<-read.csv("/inputs_for_scripts/circmarks/RenLab-H3K4me3-liver-peaks.txt", header=F, sep="\t")
 H3K4me3_BR<-H3K4me3_BR[,1:3]
-CTCF_BR<-read.csv("RenLab-CTCF-liver-peaks.txt", header=F, sep="\t")
+CTCF_BR<-read.csv("/inputs_for_scripts/circmarks/RenLab-CTCF-liver-peaks.txt", header=F, sep="\t")
 CTCF_BR<-CTCF_BR[,1:3]
-H3K27me3_BR<-read.csv("RenLab-H3K27me3-liver.peaks", header=F, sep="\t")
-supen_liver<-read.csv("superenhancers_Liver.bed", sep="\t", header = F)
+H3K27me3_BR<-read.csv("/inputs_for_scripts/circmarks/RenLab-H3K27me3-liver.peaks", header=F, sep="\t")
+supen_liver<-read.csv("/inputs_for_scripts/circmarks/superenhancers_Liver.bed", sep="\t", header = F)
 supen_liver_bed<-bedfile(supen_liver)
 
 #Add circproms from MFM RNAseq
-circpromphases<-read.csv("/inputs_for_scripts/circproms/Updated/HindIIIfragments_circadiangenes_MFMRNAseq_phases.bed", header = F, sep="\t")
-circpromphasesINTRONS<-read.csv("/inputs_for_scripts/circproms/Updated/HindIIIfragments_circadiangenesonlyintrons_MFMRNAseq_phases.bed", header = F, sep="\t")
-allINTRONSchic<-read.csv("/inputs_for_scripts/circproms/Updated/CHiC_ov_circproms_onlyintrons.bedpe", header = F, sep="\t")
+circpromphases<-read.csv("/inputs_for_scripts/circproms/HindIIIfragments_circadiangenes_MFMRNAseq_phases.bed", header = F, sep="\t")
+circpromphasesINTRONS<-read.csv("/inputs_for_scripts/circproms/HindIIIfragments_circadiangenesonlyintrons_MFMRNAseq_phases.bed", header = F, sep="\t")
+allINTRONSchic<-read.csv("/inputs_for_scripts/circproms/CHiC_ov_circproms_onlyintrons.bedpe", header = F, sep="\t")
 fangcircproms<- read.csv("/inputs_for_scripts/circproms/Updated/HindIIIfragments_circadiangenes_fang_phases.bed", header = F, sep="\t")
 
 #Chipseq circiadian tf
@@ -148,6 +148,42 @@ peaks_bedfiles<-sapply(peaks, function(x){
 
 list2env(peaks_bedfiles, envir = .GlobalEnv)
 #-------------------------------------------------------------------
+#Count observed overlaps with only other ends
+OLernas_otherends<-subjectHits(findOverlaps(ernas_bed, chic_bed_otherends))
+OLH3K27ac_BR_bed_otherends<-subjectHits(findOverlaps(H3K27ac_BR_bed, chic_bed_otherends))
+OLH3K4me1_BR_bed_otherends<-subjectHits(findOverlaps(H3K4me1_BR_bed, chic_bed_otherends))
+OLH3K4me3_BR_bed_otherends<-subjectHits(findOverlaps(H3K4me3_BR_bed, chic_bed_otherends))
+OLCTCF_BR_bed_otherends<-subjectHits(findOverlaps(CTCF_BR_bed, chic_bed_otherends))
+OLH3K27me3_BR_bed_otherends<-subjectHits(findOverlaps(H3K27me3_BR_bed, chic_bed_otherends))
+OLSUPERENH_bed_otherends<-subjectHits(findOverlaps(supen_liver_bed, chic_bed_otherends))
+OLcircpromsmfm_bed_otherends<-subjectHits(findOverlaps(circproms_MFM, chic_bed_otherends))
+OLcircpromsmfmonlyintrons_bed_otherends<-subjectHits(findOverlaps(circproms_MFM_introns, chic_bed_otherends))
+OLdhs_bed_otherends<-subjectHits(findOverlaps(dhs, chic_bed_otherends))
+
+
+#subset with otherends, only first appearance
+length_peaks<-sapply(peaks, function(x){
+  t<-get(x)
+  l<-length(subsetByOverlaps(t, chic_bed_otherends))
+  return(l)
+})
+
+l1_otherends<-length(OLernas_otherends)
+l5_otherends<-length(OLH3K27ac_BR_bed_otherends)
+l6_otherends<-length(OLH3K4me1_BR_bed_otherends)
+l7_otherends<-length(OLH3K4me3_BR_bed_otherends)
+l8_otherends<-length(OLCTCF_BR_bed_otherends)
+l9_otherends<-length(OLSUPERENH_bed_otherends)
+l10_otherends<-length(OLH3K27me3_BR_bed_otherends)
+l11_otherends<-length(OLcircpromsmfm_bed_otherends)
+l12_otherends<-length(OLcircpromsmfmonlyintrons_bed_otherends)
+l13_otherends<-length(OLdhs_bed_otherends)
+
+t_otherends<-c("ernas"=l1_otherends, 
+               "H3K27ac"=l5_otherends, "H3K4me1"=l6_otherends, "H3K4me3"=l7_otherends, "CTCF"= l8_otherends, "Superenhancers"= l9_otherends, "H3K27me3"=l10_otherends,"DHS"=l13_otherends,"Circproms_MFMRNAseq"=l10_otherends, "CircpromsINTRONS_MFMRNAseq"=l11_otherends)
+
+
+#-------------------------------------------------------------------
 ############Overlap with only other ends
 
 #1) Divide circroms into static and circadian #No overlap between the indexes of the baits corresponding to circ or static, but there's 52960 overlaps in the otherends, meaning the circ and static proms share OE
@@ -174,8 +210,8 @@ countobsOV<-function(featureslist, OEsetcircadian,OEsetstatic ){
   
 }
 
-listoffeatures<-list(ernas_bed, H3K27ac_BR_bed, H3K4me1_BR_bed,H3K4me3_BR_bed, CTCF_BR_bed, H3K27me3_BR_bed,supen_liver_bed  )
-names(listoffeatures)<-c("ernas_bed", "H3K27ac_BR_bed", "H3K4me1_BR_bed","H3K4me3_BR_bed", "CTCF_BR_bed", "H3K27me3_BR_bed","supen_liver_bed"  )
+listoffeatures<-list(ernas_bed, H3K27ac_BR_bed, H3K4me1_BR_bed,H3K4me3_BR_bed, CTCF_BR_bed, H3K27me3_BR_bed,supen_liver_bed, dhs )
+names(listoffeatures)<-c("ernas_bed", "H3K27ac_BR_bed", "H3K4me1_BR_bed","H3K4me3_BR_bed", "CTCF_BR_bed", "H3K27me3_BR_bed","supen_liver_bed" , "DHS" )
 #3) Apply function for chromatin marks
 allpromsMFM_obscountsOE<-countobsOV(featureslist = listoffeatures,OEsetcircadian = chicOE_mfmcircpcroms, OEsetstatic = chicOE_mfmstaticpcroms )
 allINTRONSMFM_obscountsOE<-countobsOV(featureslist = listoffeatures,OEsetcircadian = chicOE_mfmcircpcromsINTRONS, OEsetstatic = chicOE_mfmstaticpcromsINTRONS )
@@ -196,22 +232,8 @@ allINTRONSMFM_obscountsOE_TFs<-countobsOV(featureslist = listoffeaturesTFs,OEset
 #2) Starts iterating per chromosome
 #3) #The expected number is calculated by take 
 chrsizes<-read.csv("/Users/andoku01/Dropbox (Cambridge University)/IFC/inputs_for_scripts/chrsizes_mm9.txt", header = F, sep = "\t")
-
-#---------------
-##Apply the function using parellel
-
-#library(foreach)
-#library(doParallel)
-#no_cores <- 4 ## change how many cores to use
-#cl<-makeCluster(no_cores)
-#registerDoParallel(cl)
-
-#OEfeats<-parLapply(cl = clust,names(listoffeatures),envir=environment(), varlist=c("enrichoverlap",  "rep", "chic1", "chic2"), function(feature_bed){
-  #This is the latest version! Use this
-#  enrichoverlap(feature_bed, rep, chic1, chic2)
-#})
-
-#stopCluster(clust)
+chrsizes$V1[20]<-"chrMT"
+#--------------
 #---------------
 #This is the latest version of enrichment tool like the one used in chicago! Use this
 
@@ -221,11 +243,12 @@ enrichoverlap<-function(feature_bed, rep, chic1, chic2)
   sapply(1:rep, function(x){
     #First part is to build a random ChiC dataset with the same number of fragments 
     #Retrieve random chromosomes
-    t1_baits<-sample(chic1[,1], length(chic1[,1]), replace=T)
-    t1_baits<-factor(t1_baits, levels(t1_baits)[c(1, 12:19, 2:11, 20:22)])
+    t1_baits<-factor(sample(chic1[,1], length(chic1[,1]), replace=T))
+   # (sapply(strsplit(x = t1_baits, "chr"), function(x){x[2]}))
+    #t1_baits<-factor(t1_baits, levels(t1_baits)[c(1, 12:19, 2:11,"X", "Y")])
     #Retrieve random start positions
     #Max pos of chr, chrsizes
-    tempo<-unlist(sapply(1:22, function(x){rep(chrsizes[x,2],table(t1_baits)[x])}))- abs(chic2[,3]-chic1[,2])
+    tempo<-unlist(sapply(1:length(levels(t1_baits)), function(x){rep(chrsizes[x,2],table(t1_baits)[x])}))- abs(chic2[,3]-chic1[,2])
     t2_baits_startpos<-sapply(tempo, function(limit){sample(limit, 1, replace = F)})
     #Distance between baits and oe to determine start position of otherend fragment
     #t3_baits_endpos<-unlist(t2_baits_startpos)+(chic1[,3]-chic1[,2])
@@ -235,9 +258,8 @@ enrichoverlap<-function(feature_bed, rep, chic1, chic2)
     t8_otherends<-as.data.frame(cbind((as.character(t1_baits)), t4_otherends_startpos,t5_otherends_endpos))
     
     colnames(t8_otherends) <- c('chr','start','end')
-    enrich_bed_otherends<- sort(GRanges(seqnames = t8_otherends[,1], ranges = IRanges(as.numeric(as.character(t8_otherends[,2])),as.numeric(as.character(t8_otherends[,3])))))
-    
-    #Second part is to make the overlap using the genomic ranges function subsetByOverlap
+    enrich_bed_otherends<- sort(GRanges(seqnames = paste("chr",t8_otherends[,1], sep = ""), ranges = IRanges(as.numeric(as.character(t8_otherends[,2])),as.numeric(as.character(t8_otherends[,3])))))
+       #Second part is to make the overlap using the genomic ranges function subsetByOverlap
     #USE #Subsetbyoverlaps
     EOL<-subjectHits(findOverlaps(feature_bed, enrich_bed_otherends))
     El1_1<-length(EOL)
@@ -245,6 +267,7 @@ enrichoverlap<-function(feature_bed, rep, chic1, chic2)
   }
   
   )
+}
 }
 #-------------------------------------------
 # 2019-02-09 Enrichment Obs in circadian vs expected in static
@@ -288,26 +311,29 @@ expintrons_staticinterascontrol_TFs<-countexpOV(featureslist = listoffeaturesTFs
 stopCluster(cl)
 
 #---------------------
-#OELneuro1<-enrichoverlap(chic_bed_otherends, neuro2d_bed, 100, chic2)
-OELernas1<-enrichoverlap(ernas_bed, 100)
+#Run enrichment on random set of interactions
+chic1$chr<-gsub(pattern = "chr", replacement = "", chic1$chr)
+OELernas1<-enrichoverlap(ernas_bed, 100,  chic1, chic2)
 #EOLh3k4me3_int1<-enrichoverlap(chic_bed_otherends, h3k4me3_int_bed, 100, chic2)
 #EOLh3k4me3_prom1<-enrichoverlap(chic_bed_otherends, h3k4me3_prom_bed, 100, chic2)
 #EOLenhancer1<-enrichoverlap(chic_bed_otherends, enhancersgen_bed, 100, chic2)
 
-EOLH3K27ac_BR_bed<-enrichoverlap(H3K27ac_BR_bed, 100)
-EOLH3K4me1_BR_bed<-enrichoverlap( H3K4me1_BR_bed, 100)
-EOLH3K4me3_BR_bed<-enrichoverlap(H3K4me3_BR_bed, 100)
-EOLCTCF_BR_bed<-enrichoverlap(CTCF_BR_bed, 100)
-EOLSUPERENH_bed<-enrichoverlap(supen_liver_bed, 100)
-EOLH3K27me3_bed<-enrichoverlap(H3K27me3_BR_bed, 100)
-EOLcircpromsmfmrnaseq_bed<-enrichoverlap(circproms_MFM, 100)
-EOLcircpromsmfmrnaseqintrons_bed<-enrichoverlap(circproms_MFM_introns, 100)
+EOLH3K27ac_BR_bed<-enrichoverlap(H3K27ac_BR_bed, 100,  chic1, chic2)
+EOLH3K4me1_BR_bed<-enrichoverlap( H3K4me1_BR_bed, 100,  chic1, chic2)
+EOLH3K4me3_BR_bed<-enrichoverlap(H3K4me3_BR_bed, 100,  chic1, chic2)
+EOLCTCF_BR_bed<-enrichoverlap(CTCF_BR_bed, 100,  chic1, chic2)
+EOLSUPERENH_bed<-enrichoverlap(supen_liver_bed, 100,  chic1, chic2)
+EOLH3K27me3_bed<-enrichoverlap(H3K27me3_BR_bed, 100,  chic1, chic2)
+EOLDHS_bed<-enrichoverlap(dhs, 100,  chic1, chic2)
+EOLcircpromsmfmrnaseq_bed<-enrichoverlap(circproms_MFM, 100,  chic1, chic2)
+EOLcircpromsmfmrnaseqintrons_bed<-enrichoverlap(circproms_MFM_introns, 100,  chic1, chic2)
 #enrichment for peaks
 enrichment_peaks<-sapply(peaks, function(x){
   t<-get(x)
-  l<-(enrichoverlap(t, 100))
+  l<-(enrichoverlap(t, 100,  chic1, chic2))
   return(l)
 })
+
 #---------------------
 
 
@@ -351,17 +377,25 @@ p2<-ggplot(t1, aes(x=Var2, y=value, fill=Var1))+geom_bar(stat="identity", positi
 
 #svglite::svglite("/Enrichment/Enrichment_epigeneticmarks_ObsinCircinteractions_ExpStaticinteractions.svg")
 gridExtra::grid.arrange(p1, p2, ncol=1)
+sapply(1:8, function(x){t.test(expallproms_staticinterascontrol[,x], mu = allpromsMFM_obscountsOE[1,x])$p.value})
+
 sapply(1:6, function(x){t.test(expallproms_staticinterascontrol_TFs[,x], mu = allpromsMFM_obscountsOE_TFs[1,x])$p.value})
 #dev.off()
+
+#Pvals:
+#ernas_bed H3K27ac_BR_bed H3K4me1_BR_bed H3K4me3_BR_bed CTCF_BR_bed H3K27me3_BR_bed  supen_liver_bed DHS              
+#[1] 5.755666e-129 7.475513e-143 1.927844e-142  2.478375e-96  2.157781e-47 4.045414e-103
+#[7] 2.259606e-130 1.835416e-137
+
 #Plot epigenetic marks
 Enrich_features<-cbind("ernas"=OELernas1, 
-                       "H3K27ac"=EOLH3K27ac_BR_bed, "H3K4me1"=EOLH3K4me1_BR_bed, "H3K4me3"=EOLH3K4me3_BR_bed, "CTCF"=EOLCTCF_BR_bed, "Superenhancers"=EOLSUPERENH_bed, "H3K27me3"= EOLH3K27me3_bed, "circpromsmfmrnaseq"=EOLcircpromsmfmrnaseq_bed, "circpromsmfmrnaseqINTRONS"=EOLcircpromsmfmrnaseqintrons_bed)
+                       "H3K27ac"=EOLH3K27ac_BR_bed, "H3K4me1"=EOLH3K4me1_BR_bed, "H3K4me3"=EOLH3K4me3_BR_bed, "CTCF"=EOLCTCF_BR_bed, "Superenhancers"=EOLSUPERENH_bed, "H3K27me3"= EOLH3K27me3_bed, "DHS"=EOLDHS_bed,"circpromsmfmrnaseq"=EOLcircpromsmfmrnaseq_bed, "circpromsmfmrnaseqINTRONS"=EOLcircpromsmfmrnaseqintrons_bed)
 Enrich_features_means<-apply(Enrich_features, 2, mean) #means of the replicates of each feature
 Enrich_features_sd<-apply(Enrich_features, 2, sd) #sd of the replicates of each feature
 Enrich_features_LCI<-Enrich_features_means-Enrich_features_sd# confidence intervals  of the replicates of each feature
 Enrich_features_HCI<-Enrich_features_means+Enrich_features_sd# confidence intervals  of the replicates of each feature
 
-barplot(Enrich_features_means, cex.names = 0.65, las=1, col = "blue", main = "Overlap with Random-generated Capture-hiC fragments (only other ends)")
+#barplot(Enrich_features_means, cex.names = 0.65, las=1, col = "blue", main = "Overlap with Random-generated Capture-hiC fragments (only other ends)")
 
 #####################PLOT epigenetic marks, error intervals
 #barplot(Enrich_features_means, cex.names = 0.65,  las=1, col = "blue", main = "Overlap with Random-generated Capture-hiC fragments (only other ends)")
@@ -377,18 +411,18 @@ barplot(Enrich_features_means, cex.names = 0.65, las=1, col = "blue", main = "Ov
 #Barplots
 #Plot real counts+enrichment of epigenetic features
 #svglite::svglite("/Enrichment/Enrichment_epigeneticmarks.svg")
-tempo<-barplot((t_otherends/Enrich_features_means)[-(8:9)],ylim=c(0,6), ylab="Obs/Exp Overlaps with C-HiC",
-              names.arg = c("eRNAs", "H3K27ac", "H3K4me1", "H3K4me3", "CTCF", "Superenh", "H3K27me3"),
+tempo<-barplot((t_otherends/Enrich_features_means)[-(9:10)], ylim=c(0,6),ylab="Obs/Exp Overlaps with C-HiC",
+              names.arg = c("eRNAs", "H3K27ac", "H3K4me1", "H3K4me3", "CTCF", "Superenh", "H3K27me3","DHS"),
                             #"Circproms\nMFMRNAseq", "CircpromsINTRONS\nMFMRNAseq"), 
               las=2, col="gray30", border = F)
 abline(h = 1, col = "black", lty = 3)
-arrows(tempo, (t_otherends[-(8:9)]/(Enrich_features_means[-(8:9)]-Enrich_features_sd[-(8:9)])) ,tempo, (t_otherends[-(8:9)]/(Enrich_features_means[-(8:9)]+Enrich_features_sd[-(8:9)])), length=0.2, angle=90, code=3)
+arrows(tempo, (t_otherends[-(9:10)]/(Enrich_features_means[-(9:10)]-Enrich_features_sd[-(9:10)])) ,tempo, (t_otherends[-(9:10)]/(Enrich_features_means[-(9:10)]+Enrich_features_sd[-(9:10)])), length=0.2, angle=90, code=3)
 dev.off()
-sapply(1:9, function(x){t<-t.test(Enrich_features[,x],mu=t_otherends[x]); t$p.value})
-#ernas       H3K27ac       H3K4me1       H3K4me3          CTCF         Superenhancers
-#8.632642e-165 1.624508e-179 2.779263e-183 7.745409e-190 7.383703e-181 9.022554e-123
-#H3K27me3        Circproms_MFMRNAseq CircpromsINTRONS_MFMRNAseq 
-#1.848927e-166 1.738867e-160              3.657396e-164 
+sapply(1:8, function(x){t<-t.test(Enrich_features[,x],mu=t_otherends[x]); t$p.value})
+#ernas        H3K27ac        H3K4me1        H3K4me3           CTCF Superenhancers       H3K27me3 
+#3.441496e-230  8.946165e-249  1.629007e-261  4.319663e-254  2.108128e-252  1.522489e-213  1.383905e-172 
+#DHS 
+#4.286069e-250 
 
 ####Plot chipseq circadian tfs
 ###############Plot circadian proms
