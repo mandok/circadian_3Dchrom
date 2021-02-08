@@ -9,7 +9,7 @@ library(gtools)
 ##########CTCF MESC
 
 #CTCF mesc zt0 chrx chr19
-ctcfM0<-read.csv("/inputs_for_scripts/Metaplots/inputs_for_R_finalfigs/ctcf_mesc_zt0chrX.txt", sep=",", header = F)
+ctcfM0<-read.csv("/inputs_for_scripts/HiC/Metaplots/inputs_for_R_finalfigs/ctcf_mesc_zt0chrX.txt", sep=",", header = F)
 ctcfM0[lower.tri(ctcfM0)]<-NA
 ##tiff("/metaplot_ctcfmesc_zt0_chrX.tiff", height = 12, width = 12, units = 'cm', compression = "lzw", res = 300)
 heatmap.2(as.matrix(ctcfM0), key.xlab = "Median OE", key.title = "", Colv = F, Rowv = F,  trace="none", 
@@ -17,7 +17,7 @@ heatmap.2(as.matrix(ctcfM0), key.xlab = "Median OE", key.title = "", Colv = F, R
           labRow = NA, labCol = NA)
 #dev.off()
 
-ctcfM0<-read.csv("/inputs_for_scripts/Metaplots/inputs_for_R_finalfigs/1117CTCFmesc_zt0chr19", sep=",", header = F)
+ctcfM0<-read.csv("/inputs_for_scripts/HiC/Metaplots/inputs_for_R_finalfigs/1117CTCFmesc_zt0chr19", sep=",", header = F)
 ctcfM0[lower.tri(ctcfM0)]<-NA
 #tiff("metaplot_ctcfmesc_zt0_chr19.tiff", height = 12, width = 12, units = 'cm', compression = "lzw", res = 300)
 heatmap.2(as.matrix(ctcfM0), key.xlab = "Median OE", key.title = "", Colv = F, Rowv = F,  trace="none", 
@@ -26,7 +26,7 @@ heatmap.2(as.matrix(ctcfM0), key.xlab = "Median OE", key.title = "", Colv = F, R
 #dev.off()
 
 #CTCF mesc zt12 chrx 19
-ctcfM12<-read.csv("/inputs_for_scripts/Metaplots/inputs_for_R_finalfigs/ctcf_mesc_zt12chrX.txt", sep=",", header = F)
+ctcfM12<-read.csv("/inputs_for_scripts/HiC/Metaplots/inputs_for_R_finalfigs/ctcf_mesc_zt12chrX.txt", sep=",", header = F)
 ctcfM12[lower.tri(ctcfM12)]<-NA
 #tiff("metaplot_ctcfmesc_zt12_chrX.tiff", height = 12, width = 12, units = 'cm', compression = "lzw", res = 300)
 heatmap.2(as.matrix(ctcfM12), key.xlab = "Median OE", key.title = "", Colv = F, Rowv = F,  trace="none", 
@@ -34,7 +34,7 @@ heatmap.2(as.matrix(ctcfM12), key.xlab = "Median OE", key.title = "", Colv = F, 
           labRow = NA, labCol = NA)
 #dev.off()
 
-ctcfM12<-read.csv("/inputs_for_scripts/Metaplots/inputs_for_R_finalfigs/1117CTCFmesc_zt12chr19.txt", sep=",", header = F)
+ctcfM12<-read.csv("/inputs_for_scripts/HiC/Metaplots/inputs_for_R_finalfigs/1117CTCFmesc_zt12chr19.txt", sep=",", header = F)
 ctcfM12[lower.tri(ctcfM12)]<-NA
 #tiff("metaplot_ctcfmesc_zt12_chr19.tiff", height = 12, width = 12, units = 'cm', compression = "lzw", res = 300)
 heatmap.2(as.matrix(ctcfM12), key.xlab = "Median OE", key.title = "", Colv = F, Rowv = F,  trace="none", 
@@ -48,7 +48,7 @@ heatmap.2(as.matrix(ctcfM12), key.xlab = "Median OE", key.title = "", Colv = F, 
 
 #CTCF ENCONDE
 #HiC ZT0 - chr19
-ctcfliveENCODEzt0chr19<-read.csv("/inputs_for_scripts/Metaplots/inputs_for_R_finalfigs/0318ctcfliverENCODE_zt0allchr19_median.txt", sep=",", header = F)
+ctcfliveENCODEzt0chr19<-read.csv("/inputs_for_scripts/HiC/Metaplots/inputs_for_R_finalfigs/0318ctcfliverENCODE_zt0allchr19_median.txt", sep=",", header = F)
 ctcfliveENCODEzt0chr19[lower.tri(ctcfliveENCODEzt0chr19)]<-NA
 #tiff("metaplot_ctcfliverENCODE_zt0_chr19.tiff", height = 12, width = 12, units = 'cm', compression = "lzw", res = 300)
 heatmap.2(as.matrix(ctcfliveENCODEzt0chr19), key.xlab = "Median OE", key.title = "", Colv = F, Rowv = F,  trace="none", 
@@ -57,7 +57,7 @@ heatmap.2(as.matrix(ctcfliveENCODEzt0chr19), key.xlab = "Median OE", key.title =
 #dev.off()
 
 #HiC ZT12 - all chrs
-ctcfliveENCODEzt12allchrs_1000RP<-read.csv("/inputs_for_scripts/Metaplots/inputs_for_R_finalfigs/0318CTCFliverENCODE1000rp_zt12allchrs_median.txt", sep=",", header = F)
+ctcfliveENCODEzt12allchrs_1000RP<-read.csv("/inputs_for_scripts/HiC/Metaplots/inputs_for_R_finalfigs/0318CTCFliverENCODE1000rp_zt12allchrs_median.txt", sep=",", header = F)
 
 #Remove cells of "genebody"
 ctcfliveENCODEzt12allchrs_1000RP<-ctcfliveENCODEzt12allchrs_1000RP[c(1:11,16:25),c(1:11,16:25)]
@@ -73,7 +73,7 @@ heatmap.2(as.matrix(ctcfliveENCODEzt12allchrs_1000RP), key.xlab = "Median OE", k
 
 #CTCF LIVER MFM
 #HiC ZT12 - chr19
-ctcfliverMFM20FE_zt12chr19_500RP<-read.csv("/inputs_for_scripts/Metaplots/inputs_for_R_finalfigs/0318CTCFliverMFM20FE_zt12chr19_median.txt", sep=",", header = F)
+ctcfliverMFM20FE_zt12chr19_500RP<-read.csv("/inputs_for_scripts/HiC/Metaplots/inputs_for_R_finalfigs/0318CTCFliverMFM20FE_zt12chr19_median.txt", sep=",", header = F)
 #Remove cells of "genebody"
 ctcfliverMFM20FE_zt12chr19_500RP<-ctcfliverMFM20FE_zt12chr19_500RP[c(1:11,16:25),c(1:11,16:25)]
 
@@ -88,7 +88,7 @@ heatmap.2(as.matrix(ctcfliverMFM20FE_zt12chr19_500RP), key.xlab = "Median OE", k
 #dev.off()
 
 #HiC ZT0 - all chrs
-ctcfliverMFM20FE_zt0allchrs_1000RP<-read.csv("/inputs_for_scripts/Metaplots/inputs_for_R_finalfigs/0318CTCFliverMFM20FE1000rp_zt0allchrs_median.txt", sep=",", header = F)
+ctcfliverMFM20FE_zt0allchrs_1000RP<-read.csv("/inputs_for_scripts/HiC/Metaplots/inputs_for_R_finalfigs/0318CTCFliverMFM20FE1000rp_zt0allchrs_median.txt", sep=",", header = F)
 #Remove cells of "genebody"
 ctcfliverMFM20FE_zt0allchrs_1000RP<-ctcfliverMFM20FE_zt0allchrs_1000RP[c(1:11,16:25),c(1:11,16:25)]
 
@@ -103,7 +103,7 @@ heatmap.2(as.matrix(ctcfliverMFM20FE_zt0allchrs_1000RP), key.xlab = "Median OE",
 
 
 #HiC ZT12 - all chrs
-ctcfliverMFM20FE_zt12allchrs_1000RP<-read.csv("/inputs_for_scripts/Metaplots/inputs_for_R_finalfigs/0318CTCFliverMFM20FE1000rp_zt12allchrs_median.txt", sep=",", header = F)
+ctcfliverMFM20FE_zt12allchrs_1000RP<-read.csv("/inputs_for_scripts/HiC/Metaplots/inputs_for_R_finalfigs/0318CTCFliverMFM20FE1000rp_zt12allchrs_median.txt", sep=",", header = F)
 #Remove cells of "genebody"
 ctcfliverMFM20FE_zt12allchrs_1000RP<-ctcfliverMFM20FE_zt12allchrs_1000RP[c(1:11,16:25),c(1:11,16:25)]
 
@@ -135,7 +135,7 @@ heatmap.2(as.matrix(ctcfliverMFM20FE_zt12allchrs_1000RP-ctcfliverMFM20FE_zt0allc
 #--------CTCF ZT0--------#
 
 #HiC ZT0 - all chrs
-ctcfliverMFMZT0_zt0allchrs_1000RP<-read.csv("/inputs_for_scripts/Metaplots/inputs_for_R_finalfigs/CTCF/0518CTCFZT0MFM1000RP_HiCZT0allchrs_median.txt", sep=",", header = F)
+ctcfliverMFMZT0_zt0allchrs_1000RP<-read.csv("/inputs_for_scripts/HiC/Metaplots/inputs_for_R_finalfigs/CTCF/0518CTCFZT0MFM1000RP_HiCZT0allchrs_median.txt", sep=",", header = F)
 #Remove cells of "genebody"
 ctcfliverMFMZT0_zt0allchrs_1000RP<-ctcfliverMFMZT0_zt0allchrs_1000RP[c(1:11,16:25),c(1:11,16:25)]
 
@@ -150,7 +150,7 @@ heatmap.2(as.matrix(ctcfliverMFMZT0_zt0allchrs_1000RP), key.xlab = "Median OE", 
 
 
 #HiC ZT12 - all chrs
-ctcfliverMFMZT0_zt12allchrs_1000RP<-read.csv("/inputs_for_scripts/Metaplots/inputs_for_R_finalfigs/CTCF/0518CTCFZT0MFM1000RP_HiCZT12allchrs_median.txt", sep=",", header = F)
+ctcfliverMFMZT0_zt12allchrs_1000RP<-read.csv("/inputs_for_scripts/HiC/Metaplots/inputs_for_R_finalfigs/CTCF/0518CTCFZT0MFM1000RP_HiCZT12allchrs_median.txt", sep=",", header = F)
 #Remove cells of "genebody"
 ctcfliverMFMZT0_zt12allchrs_1000RP<-ctcfliverMFMZT0_zt12allchrs_1000RP[c(1:11,16:25),c(1:11,16:25)]
 
@@ -178,7 +178,7 @@ heatmap.2(as.matrix(ctcfliverMFMZT0_zt12allchrs_1000RP/ctcfliverMFMZT0_zt0allchr
 #--------CTCF ZT6--------#
 
 #HiC ZT6 - all chrs
-ctcfliverMFMZT6_zt6allchrs_1000RP<-read.csv("/inputs_for_scripts/Metaplots/inputs_for_R_finalfigs/CTCF/0518CTCFZT6MFM1000RP_HiCZT6allchrs_median.txt", sep=",", header = F)
+ctcfliverMFMZT6_zt6allchrs_1000RP<-read.csv("/inputs_for_scripts/HiC/Metaplots/inputs_for_R_finalfigs/CTCF/0518CTCFZT6MFM1000RP_HiCZT6allchrs_median.txt", sep=",", header = F)
 #Remove cells of "genebody"
 ctcfliverMFMZT6_zt6allchrs_1000RP<-ctcfliverMFMZT6_zt6allchrs_1000RP[c(1:11,16:25),c(1:11,16:25)]
 
@@ -193,7 +193,7 @@ heatmap.2(as.matrix(ctcfliverMFMZT6_zt6allchrs_1000RP), key.xlab = "Median OE", 
 
 
 #HiC ZT18 - all chrs
-ctcfliverMFMZT6_zt18allchrs_1000RP<-read.csv("/inputs_for_scripts/Metaplots/inputs_for_R_finalfigs/CTCF/0518CTCFZT6MFM1000RP_HiCZT18allchrs_median.txt", sep=",", header = F)
+ctcfliverMFMZT6_zt18allchrs_1000RP<-read.csv("/inputs_for_scripts/HiC/Metaplots/inputs_for_R_finalfigs/CTCF/0518CTCFZT6MFM1000RP_HiCZT18allchrs_median.txt", sep=",", header = F)
 #Remove cells of "genebody"
 ctcfliverMFMZT6_zt18allchrs_1000RP<-ctcfliverMFMZT6_zt18allchrs_1000RP[c(1:11,16:25),c(1:11,16:25)]
 
@@ -226,7 +226,7 @@ heatmap.2(as.matrix(ctcfliverMFMZT6_zt18allchrs_1000RP-ctcfliverMFMZT6_zt6allchr
 #--------CTCF ZT12--------#
 
 #HiC ZT0 - all chrs
-ctcfliverMFMZT12_zt0allchrs_1000RP<-read.csv("/inputs_for_scripts/Metaplots/inputs_for_R_finalfigs/CTCF/0518CTCFZT12MFM1000RP_HiCZT0allchrs_median.txt", sep=",", header = F)
+ctcfliverMFMZT12_zt0allchrs_1000RP<-read.csv("/inputs_for_scripts/HiC/Metaplots/inputs_for_R_finalfigs/CTCF/0518CTCFZT12MFM1000RP_HiCZT0allchrs_median.txt", sep=",", header = F)
 #Remove cells of "genebody"
 ctcfliverMFMZT12_zt0allchrs_1000RP<-ctcfliverMFMZT12_zt0allchrs_1000RP[c(1:11,16:25),c(1:11,16:25)]
 
@@ -241,7 +241,7 @@ heatmap.2(as.matrix(ctcfliverMFMZT12_zt0allchrs_1000RP), key.xlab = "Median OE",
 
 
 #HiC ZT12 - all chrs
-ctcfliverMFMZT12_zt12allchrs_1000RP<-read.csv("/inputs_for_scripts/Metaplots/inputs_for_R_finalfigs/CTCF/0518CTCFZT12MFM1000RP_HiCZT12allchrs_median.txt", sep=",", header = F)
+ctcfliverMFMZT12_zt12allchrs_1000RP<-read.csv("/inputs_for_scripts/HiC/Metaplots/inputs_for_R_finalfigs/CTCF/0518CTCFZT12MFM1000RP_HiCZT12allchrs_median.txt", sep=",", header = F)
 #Remove cells of "genebody"
 ctcfliverMFMZT12_zt12allchrs_1000RP<-ctcfliverMFMZT12_zt12allchrs_1000RP[c(1:11,16:25),c(1:11,16:25)]
 
@@ -273,7 +273,7 @@ heatmap.2(as.matrix(ctcfliverMFMZT12_zt12allchrs_1000RP-ctcfliverMFMZT12_zt0allc
 #--------CTCF ZT18--------#
 
 #HiC ZT6 - all chrs
-ctcfliverMFMZT18_zt6allchrs_1000RP<-read.csv("/inputs_for_scripts/Metaplots/inputs_for_R_finalfigs/CTCF/0518CTCFZT18MFM1000RP_HiCZT6allchrs_median.txt", sep=",", header = F)
+ctcfliverMFMZT18_zt6allchrs_1000RP<-read.csv("/inputs_for_scripts/HiC/Metaplots/inputs_for_R_finalfigs/CTCF/0518CTCFZT18MFM1000RP_HiCZT6allchrs_median.txt", sep=",", header = F)
 #Remove cells of "genebody"
 ctcfliverMFMZT18_zt6allchrs_1000RP<-ctcfliverMFMZT18_zt6allchrs_1000RP[c(1:11,16:25),c(1:11,16:25)]
 
@@ -288,7 +288,7 @@ heatmap.2(as.matrix(ctcfliverMFMZT18_zt6allchrs_1000RP), key.xlab = "Median OE",
 
 
 #HiC ZT18 - all chrs
-ctcfliverMFMZT18_zt18allchrs_1000RP<-read.csv("/inputs_for_scripts/Metaplots/inputs_for_R_finalfigs/CTCF/0518CTCFZT18MFM1000RP_HiCZT18allchrs_median.txt", sep=",", header = F)
+ctcfliverMFMZT18_zt18allchrs_1000RP<-read.csv("/inputs_for_scripts/HiC/Metaplots/inputs_for_R_finalfigs/CTCF/0518CTCFZT18MFM1000RP_HiCZT18allchrs_median.txt", sep=",", header = F)
 #Remove cells of "genebody"
 ctcfliverMFMZT18_zt18allchrs_1000RP<-ctcfliverMFMZT18_zt18allchrs_1000RP[c(1:11,16:25),c(1:11,16:25)]
 
@@ -336,7 +336,7 @@ heatmap.2(as.matrix(ctcfliverMFMZT18_zt18allchrs_1000RP/ctcfliverMFMZT18_zt6allc
 ##dev.off()
 
 #HiC ZT0 - all chrs
-TADsZT0MFM_zt0allchrs_1000RP<-read.csv("/inputs_for_scripts/Metaplots/inputs_for_R_finalfigs/TADs/50Kbres_200Kbwindow/0418TADsZT10_50KbresolZT0HiCallchrs_median.txt", sep=",", header = F)
+TADsZT0MFM_zt0allchrs_1000RP<-read.csv("/inputs_for_scripts/HiC/Metaplots/inputs_for_R_finalfigs/TADs/50Kbres_200Kbwindow/0418TADsZT10_50KbresolZT0HiCallchrs_median.txt", sep=",", header = F)
 
 TADsZT0MFM_zt0allchrs_1000RP[lower.tri(TADsZT0MFM_zt0allchrs_1000RP)]<-NA
 
@@ -364,7 +364,7 @@ heatmap.2(as.matrix(TADsZT0MFM_zt0allchrs_1000RP), key.xlab = "Median OE", key.t
 ##dev.off()
 
 ##HiC ZT12 - all chrs
-TADsZT0MFM_zt12allchrs_1000RP<-read.csv("/inputs_for_scripts/Metaplots/inputs_for_R_finalfigs/TADs/50Kbres_200Kbwindow/0418TADsZT10_50KbresolZT12HiCallchrs_median.txt", sep=",", header = F)
+TADsZT0MFM_zt12allchrs_1000RP<-read.csv("/inputs_for_scripts/HiC/Metaplots/inputs_for_R_finalfigs/TADs/50Kbres_200Kbwindow/0418TADsZT10_50KbresolZT12HiCallchrs_median.txt", sep=",", header = F)
 
 TADsZT0MFM_zt12allchrs_1000RP[lower.tri(TADsZT0MFM_zt12allchrs_1000RP)]<-NA
 
@@ -399,7 +399,7 @@ heatmap.2(as.matrix(TADsZT0MFM_zt12allchrs_1000RP-TADsZT0MFM_zt0allchrs_1000RP),
 
 #HiC ZT6 - allchrs
 
-TADsZT6MFM_zt6allchrs_1000RP<-read.csv("/inputs_for_scripts/Metaplots/inputs_for_R_finalfigs/TADs/50Kbres_200Kbwindow/0418TADsZT6_50KbresolZT6HiCallchrs_median.txt", sep=",", header = F)
+TADsZT6MFM_zt6allchrs_1000RP<-read.csv("/inputs_for_scripts/HiC/Metaplots/inputs_for_R_finalfigs/TADs/50Kbres_200Kbwindow/0418TADsZT6_50KbresolZT6HiCallchrs_median.txt", sep=",", header = F)
 
 TADsZT6MFM_zt6allchrs_1000RP[lower.tri(TADsZT6MFM_zt6allchrs_1000RP)]<-NA
 
@@ -416,7 +416,7 @@ heatmap.2(as.matrix(TADsZT6MFM_zt6allchrs_1000RP), key.xlab = "Median OE", key.t
 
 #HiC ZT18 - allchrs
 
-TADsZT6MFM_zt18allchrs_1000RP<-read.csv("/inputs_for_scripts/Metaplots/inputs_for_R_finalfigs/TADs/50Kbres_200Kbwindow/0418TADsZT6_50KbresolZT18HiCallchrs_median.txt", sep=",", header = F)
+TADsZT6MFM_zt18allchrs_1000RP<-read.csv("/inputs_for_scripts/HiC/Metaplots/inputs_for_R_finalfigs/TADs/50Kbres_200Kbwindow/0418TADsZT6_50KbresolZT18HiCallchrs_median.txt", sep=",", header = F)
 
 TADsZT6MFM_zt18allchrs_1000RP[lower.tri(TADsZT6MFM_zt18allchrs_1000RP)]<-NA
 
@@ -462,7 +462,7 @@ heatmap.2(as.matrix(TADsZT6MFM_zt18allchrs_1000RP/TADsZT6MFM_zt6allchrs_1000RP),
 ##dev.off()
 
 #HiC ZT0 - allchrs
-TADsZT12MFM_zt0allchrs_1000RP<-read.csv("/inputs_for_scripts/Metaplots/inputs_for_R_finalfigs/TADs/50Kbres_200Kbwindow/0418TADsZT12_50KbresolZT0HiCallchrs_median.txt", sep=",", header = F)
+TADsZT12MFM_zt0allchrs_1000RP<-read.csv("/inputs_for_scripts/HiC/Metaplots/inputs_for_R_finalfigs/TADs/50Kbres_200Kbwindow/0418TADsZT12_50KbresolZT0HiCallchrs_median.txt", sep=",", header = F)
 
 TADsZT12MFM_zt0allchrs_1000RP[lower.tri(TADsZT12MFM_zt0allchrs_1000RP)]<-NA
 
@@ -494,7 +494,7 @@ heatmap.2(as.matrix(TADsZT12MFM_zt0allchrs_1000RP), key.xlab = "Median OE", key.
 ##dev.off()
 
 #HiC ZT12 - allchrs
-TADsZT12MFM_zt12allchrs_1000RP<-read.csv("/inputs_for_scripts/Metaplots/inputs_for_R_finalfigs/TADs/50Kbres_200Kbwindow/0418TADsZT12_50KbresolZT12HiCallchrs_median.txt", sep=",", header = F)
+TADsZT12MFM_zt12allchrs_1000RP<-read.csv("/inputs_for_scripts/HiC/Metaplots/inputs_for_R_finalfigs/TADs/50Kbres_200Kbwindow/0418TADsZT12_50KbresolZT12HiCallchrs_median.txt", sep=",", header = F)
 
 TADsZT12MFM_zt12allchrs_1000RP[lower.tri(TADsZT12MFM_zt12allchrs_1000RP)]<-NA
 
@@ -530,7 +530,7 @@ heatmap.2(as.matrix(TADsZT12MFM_zt12allchrs_1000RP-TADsZT12MFM_zt0allchrs_1000RP
 
 
 #HiC ZT6 - allchrs
-TADsZT18MFM_zt6allchrs_1000RP<-read.csv("/inputs_for_scripts/Metaplots/inputs_for_R_finalfigs/TADs/50Kbres_200Kbwindow/0418TADsZT18_50KbresolZT6HiCallchrs_median.txt", sep=",", header = F)
+TADsZT18MFM_zt6allchrs_1000RP<-read.csv("/inputs_for_scripts/HiC/Metaplots/inputs_for_R_finalfigs/TADs/50Kbres_200Kbwindow/0418TADsZT18_50KbresolZT6HiCallchrs_median.txt", sep=",", header = F)
 
 TADsZT18MFM_zt6allchrs_1000RP[lower.tri(TADsZT18MFM_zt6allchrs_1000RP)]<-NA
 
@@ -549,7 +549,7 @@ heatmap.2(as.matrix(TADsZT18MFM_zt6allchrs_1000RP), key.xlab = "Median OE", key.
 
 
 #HiC ZT18 - allchrs
-TADsZT18MFM_zt18allchrs_1000RP<-read.csv("/inputs_for_scripts/Metaplots/inputs_for_R_finalfigs/TADs/50Kbres_200Kbwindow/0418TADsZT18_50KbresolZT18HiCallchrs_median.txt", sep=",", header = F)
+TADsZT18MFM_zt18allchrs_1000RP<-read.csv("/inputs_for_scripts/HiC/Metaplots/inputs_for_R_finalfigs/TADs/50Kbres_200Kbwindow/0418TADsZT18_50KbresolZT18HiCallchrs_median.txt", sep=",", header = F)
 
 TADsZT18MFM_zt18allchrs_1000RP[lower.tri(TADsZT18MFM_zt18allchrs_1000RP)]<-NA
 
