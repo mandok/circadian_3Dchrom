@@ -1,6 +1,6 @@
 #####################---Core-clock interactions---##########
 #Open coreclock gene positions
-coreclock<-read.csv("Core_clock_short_fragments.txt", sep = "\t", header = T)
+coreclock<-read.csv("/inputs_for_scripts/Core_clock_short_fragments.txt", sep = "\t", header = T)
 coreclock_bed<-GRanges(seqnames = paste("chr", coreclock[,1], sep = ""), ranges = IRanges(coreclock[,2], coreclock[,3]), name=coreclock[,4])
 #### Open chic merge file
 
@@ -22,11 +22,11 @@ chic_bait_bed<-GRanges(seqnames= Rle(chic_baits[,1]), ranges = IRanges(chic_bait
 
 ###Open eRNAs
 #Open TOTAL eRNAs 
-total_ernas<-read.csv("eRNAs_de_novo_oscillating.txt", sep = "\t", header = T)
+total_ernas<-read.csv("inputs_for_scripts/eRNAs_de_novo_oscillating.txt", sep = "\t", header = T)
 total_ernas<-bedfile(total_ernas, columnnames)
 
 #Osc eRNA
-osc_ernas<-read.csv("eRNAs_de_novo_oscillating_phases.txt", header = T, sep = "\t")
+osc_ernas<-read.csv("inputs_for_scripts/eRNAs_de_novo_oscillating_phases.txt", header = T, sep = "\t")
 osc_ernas<-bedfile(osc_ernas, columnnames)
 
 #Retrieve bait index
@@ -46,9 +46,9 @@ int_coreclock_OE_witheRNAs<-sapply(1:17, function(coreclockgene){
 #other circadian genes, not core clock
 
 #set working directory
-circpromphases<-read.csv("inputs_for_scripts/circproms/MFM_RNAseq/HindIIIfragments_circadiangenes_MFMRNAseq_phases.bed", header = F, sep="\t")
+circpromphases<-read.csv("inputs_for_scripts/circproms/HindIIIfragments_circadiangenes_MFMRNAseq_phases.bed", header = F, sep="\t")
 
-circpromphasesINTRONS<-read.csv("inputs_for_scripts/circproms/MFM_RNAseq/HindIIIfragments_circadiangenesonlyintrons_MFMRNAseq_phases.bed", header = F, sep="\t")
+circpromphasesINTRONS<-read.csv("inputs_for_scripts/circproms/HindIIIfragments_circadiangenesonlyintrons_MFMRNAseq_phases.bed", header = F, sep="\t")
 #Obtain positions from biomart
 #circpromphases_pos<-getBM(attributes=c('chromosome_name','start_position','end_position', 'refseq_mrna'), filters ='refseq_mrna', value=circpromphases[,1],  mart = ensembl)
 #circpromphases_pos[,1]<-paste("chr", circpromphases_pos[,1], sep = "")
@@ -212,8 +212,8 @@ legend("topright", legend = c("Non core-clock genes", "Core clock genes"),  xpd=
 ###########################################
 # Dynamic interactions
 
-load("inputs_for_scripts/differential_interactions/MFM_RNAseq/MFMcircproms_diffs_readcount_above150kb2018")
-load("inputs_for_scripts/differential_interactions/MFM_RNAseq/MFMcircproms_diffs_readcount_below150kb2018")
+load("inputs_for_scripts/differential_interactions/MFMcircproms_diffs_readcount_above150kb2018")
+load("inputs_for_scripts/differential_interactions/MFMcircproms_diffs_readcount_below150kb2018")
 load("inputs_for_scripts/circtablesinter")
 merge_uniquedifinter<-function(tablecircadianinteractions, outputadamscript){
   sapply(1:2, function(updown){
@@ -242,7 +242,7 @@ allreadsbelow_difinter_timepoint<-unique(allreadsbelow_difinter_timepoint[order(
 
 #Overlap of 982 rows
 #Read nondifferential inters: static; This set includes all the interactions in circadian-table
-allNONdiffinter_abovebelow150Kb<-read.csv("inputs_for_scripts/differential_interactions/MFM_RNAseq/MFMcircproms_allNONdiffinter_abovebelow150kb2020includingnotMFMcps.bedpe", sep="\t", header=F)
+allNONdiffinter_abovebelow150Kb<-read.csv("inputs_for_scripts/differential_interactions/MFMcircproms_allNONdiffinter_abovebelow150kb2020includingnotMFMcps.bedpe", sep="\t", header=F)
 #Bedfiles, GRanges Objects
 
 STATICchic_bait_bed<-GRanges(seqnames= Rle(allNONdiffinter_abovebelow150Kb[,1]), ranges = IRanges(allNONdiffinter_abovebelow150Kb[,2], allNONdiffinter_abovebelow150Kb[,3]))
@@ -398,7 +398,7 @@ t1<-t(t1)
 colnames(t1)<-c("Dynamicinters_below150kb", "Staticinters_below150kb", "Dynamicinters_above150kb", "Staticinters_above150kb")
 t1<-t1[,c("Dynamicinters_below150kb","Dynamicinters_above150kb", "Staticinters_below150kb", "Staticinters_above150kb") ]
 apply(t1, 2, median)
-write.table(x = t1, file = "inputs_for_scripts/differential_interactions/MFM_RNAseq/Core_clock/Expected_interactions_coreclock_100iter.txt", quote = F, sep = "\t", row.names = F, col.names = T)
+write.table(x = t1, file = "inputs_for_scripts/differential_interactions/Expected_interactions_coreclock_100iter.txt", quote = F, sep = "\t", row.names = F, col.names = T)
 
 
 #Extra: Dina vs static of genes Arntl", "Per1", "Per2", "Clock", "Npas2", "Cry1","Cry2", "Nr1d1", "Nr1d2", "Rorc
@@ -455,8 +455,8 @@ t<-circpromphases[circpromphases$V4%in% coreclock_bed$genename,]
 
 ##############2020-07-06 Overlap with eRNAs
 
-osc_ernas<-bedfile(read.csv("eRNAs_de_novo_oscillating_phases.txt", header = T, sep = "\t"),columnnames)
-total_ernas<-bedfile(-read.csv("eRNAs_de_novo_oscillating.txt", sep = "\t", header = T), columnnames)
+osc_ernas<-bedfile(read.csv("inputs_for_scripts/eRNAs_de_novo_oscillating_phases.txt", header = T, sep = "\t"),columnnames)
+total_ernas<-bedfile(-read.csv("inputs_for_scripts/eRNAs_de_novo_oscillating.txt", sep = "\t", header = T), columnnames)
 
 coreclock_separately_difinters_overnas<-function(difintersbelow,difintersabove, coreclock_bed, total_ernas){
   BELOWgrangesconservedinalltimepoints_B<-GRanges(seqnames = difintersbelow[,1], ranges = IRanges(difintersbelow[,2], difintersbelow[,3]), ZT0_difint= difintersbelow[,7], ZT6_difint= difintersbelow[,8], ZT12_difint= difintersbelow[,9], ZT18_difint= difintersbelow[,10])
@@ -509,7 +509,7 @@ obs_cc_sep_oscernas_belowabove<-coreclock_separately_difinters_overnas(allreadsb
 
 #########Expected number of interactions of non coreclock circadian genes:
 #circpromall<-bedfile(circpromphases, columnnames)
-circpromphases<-import("inputs_for_scripts/circproms/MFM_RNAseq/HindIIIfragments_circadiangenes_MFMRNAseq.bed", format = "BED")
+circpromphases<-import("inputs_for_scripts/circproms/HindIIIfragments_circadiangenes_MFMRNAseq.bed", format = "BED")
 circpromallintrons<-bedfile(circpromphasesINTRONS, columnnames)
 circprom_notcoreclock<-circpromphases[!(circpromphases$name%in%coreclock_bed$name)]
 circpromINTRONS_notcoreclock<-circpromallintrons[!(1:271 %in% queryHits(findOverlaps( circpromallintrons, coreclock_bed)))]
@@ -593,15 +593,15 @@ median(sapply(1:100, function(x){sum(unlist(exp_cc_sep_belowabove[3,x]))}))/17
 #Export:
 allinters<-do.call(rbind.data.frame, exp_cc_sep_belowabove[1,])
 colnames(allinters)<-NULL
-write.table(x = allinters, file = "inputs_for_scripts/differential_interactions/MFM_RNAseq/Core_clock/2020_07_08_Expected_interactions_coreclock_100iter_Totalinters.txt", quote = F, sep = "\t", row.names = F, col.names = F)
+write.table(x = allinters, file = "inputs_for_scripts/differential_interactions/2020_07_08_Expected_interactions_coreclock_100iter_Totalinters.txt", quote = F, sep = "\t", row.names = F, col.names = F)
 
 Dynamic<-do.call(rbind.data.frame, exp_cc_sep_belowabove[2,])
 colnames(Dynamic)<-NULL
-write.table(x = Dynamic, file = "inputs_for_scripts/differential_interactions/MFM_RNAseq/Core_clock/2020_07_08_Expected_interactions_coreclock_100iter_Dynamic.txt", quote = F, sep = "\t", row.names = F, col.names = F)
+write.table(x = Dynamic, file = "inputs_for_scripts/differential_interactions/2020_07_08_Expected_interactions_coreclock_100iter_Dynamic.txt", quote = F, sep = "\t", row.names = F, col.names = F)
 
 Static<-do.call(rbind.data.frame, exp_cc_sep_belowabove[3,])
 colnames(Static)<-NULL
-write.table(x = Static, file = "inputs_for_scripts/differential_interactions/MFM_RNAseq/Core_clock/2020_07_06_Expected_interactions_coreclock_100iter_Static.txt", quote = F, sep = "\t", row.names = F, col.names = F)
+write.table(x = Static, file = "inputs_for_scripts/differential_interactions/2020_07_06_Expected_interactions_coreclock_100iter_Static.txt", quote = F, sep = "\t", row.names = F, col.names = F)
 
 #Expected per random 17 genes
 #exp_cc_sep_belowabove_allinters<-read.csv("inputs_for_scripts/differential_interactions/MFM_RNAseq/Core_clock/2020_07_06_Expected_interactions_coreclock_100iter_Totalinters.txt",sep = "\t",header = T)
@@ -674,23 +674,23 @@ median(sapply(1:100, function(iter){median(unlist(exp_cc_oscernas_belowabove[3,i
 #Export:
 #Total eRNAs
 allinters<-do.call(rbind.data.frame, exp_cc_totalernas_belowabove[1,])
-write.table(x = allinters, file = "inputs_for_scripts/differential_interactions/MFM_RNAseq/Core_clock/2020_07_06_Expected_interactions_coreclock_100iter_ovtotalernas_Totalinters.txt", quote = F, sep = "\t", row.names = F, col.names = T)
+write.table(x = allinters, file = "inputs_for_scripts/differential_interactions/2020_07_06_Expected_interactions_coreclock_100iter_ovtotalernas_Totalinters.txt", quote = F, sep = "\t", row.names = F, col.names = T)
 
 Dynamic<-do.call(rbind.data.frame, exp_cc_totalernas_belowabove[2,])
-write.table(x = Dynamic, file = "inputs_for_scripts/differential_interactions/MFM_RNAseq/Core_clock/2020_07_06_Expected_interactions_coreclock_100iter_ovtotalernas_Dynamic.txt", quote = F, sep = "\t", row.names = F, col.names = T)
+write.table(x = Dynamic, file = "inputs_for_scripts/differential_interactions/2020_07_06_Expected_interactions_coreclock_100iter_ovtotalernas_Dynamic.txt", quote = F, sep = "\t", row.names = F, col.names = T)
 
 Static<-do.call(rbind.data.frame, exp_cc_totalernas_belowabove[3,])
-write.table(x = Static, file = "inputs_for_scripts/differential_interactions/MFM_RNAseq/Core_clock/2020_07_06_Expected_interactions_coreclock_100iter_ovtotalernas_Static.txt", quote = F, sep = "\t", row.names = F, col.names = T)
+write.table(x = Static, file = "inputs_for_scripts/differential_interactions/2020_07_06_Expected_interactions_coreclock_100iter_ovtotalernas_Static.txt", quote = F, sep = "\t", row.names = F, col.names = T)
 
 #osc eRNAs
 allinters<-do.call(rbind.data.frame, exp_cc_oscernas_belowabove[1,])
-write.table(x = allinters, file = "inputs_for_scripts/differential_interactions/MFM_RNAseq/Core_clock/2020_07_06_Expected_interactions_coreclock_100iter_ovoscernas_Totalinters.txt", quote = F, sep = "\t", row.names = F, col.names = T)
+write.table(x = allinters, file = "inputs_for_scripts/differential_interactions/2020_07_06_Expected_interactions_coreclock_100iter_ovoscernas_Totalinters.txt", quote = F, sep = "\t", row.names = F, col.names = T)
 
 Dynamic<-do.call(rbind.data.frame, exp_cc_oscernas_belowabove[2,])
-write.table(x = Dynamic, file = "inputs_for_scripts/differential_interactions/MFM_RNAseq/Core_clock/2020_07_06_Expected_interactions_coreclock_100iter_ovoscernas_Dynamic.txt", quote = F, sep = "\t", row.names = F, col.names = T)
+write.table(x = Dynamic, file = "inputs_for_scripts/differential_interactions/2020_07_06_Expected_interactions_coreclock_100iter_ovoscernas_Dynamic.txt", quote = F, sep = "\t", row.names = F, col.names = T)
 
 Static<-do.call(rbind.data.frame, exp_cc_oscernas_belowabove[3,])
-write.table(x = Static, file = "inputs_for_scripts/differential_interactions/MFM_RNAseq/Core_clock/2020_07_06_Expected_interactions_coreclock_100iter_ovoscernas_Static.txt", quote = F, sep = "\t", row.names = F, col.names = T)
+write.table(x = Static, file = "inputs_for_scripts/differential_interactions/2020_07_06_Expected_interactions_coreclock_100iter_ovoscernas_Static.txt", quote = F, sep = "\t", row.names = F, col.names = T)
 
 
 
@@ -713,7 +713,7 @@ write.table(x = t3, file = "inputs_for_scripts/countsinteractionspercircproms_ta
 
 #########################
 ####2020-07-8 Repeat with fang GROseq to confirm results: 1098 fang; 13 cc
-fangcircproms<- read.csv("/inputs_for_scripts/circproms/Updated/HindIIIfragments_circadiangenes_fang_phases.bed", header = F, sep="\t")
+fangcircproms<- read.csv("/inputs_for_scripts/circproms/HindIIIfragments_circadiangenes_fang_phases.bed", header = F, sep="\t")
 fangcircproms<- bedfile(fangcircproms[,-4], columnnames)
 t<- read.csv("/inputs_for_scripts/circproms/Updated/HindIIIfragments_circadiangenes_fang_phases.bed", header = F, sep="\t")
 mcols(fangcircproms)$name<-t[,5]
@@ -753,15 +753,15 @@ median(sapply(1:100, function(x){sum(unlist(exp_cc_sep_belowaboveFANG[3,x]))}))/
 #Export:
 allinters<-do.call(rbind.data.frame, exp_cc_sep_belowaboveFANG[1,])
 colnames(allinters)<-NULL
-write.table(x = allinters, file = "inputs_for_scripts/differential_interactions/MFM_RNAseq/Core_clock/2020_07_08_Expected_interactions_coreclock_100iter_TotalintersFANG.txt", quote = F, sep = "\t", row.names = F, col.names = F)
+write.table(x = allinters, file = "inputs_for_scripts/differential_interactions/2020_07_08_Expected_interactions_coreclock_100iter_TotalintersFANG.txt", quote = F, sep = "\t", row.names = F, col.names = F)
 
 Dynamic<-do.call(rbind.data.frame, exp_cc_sep_belowaboveFANG[2,])
 colnames(Dynamic)<-NULL
-write.table(x = Dynamic, file = "inputs_for_scripts/differential_interactions/MFM_RNAseq/Core_clock/2020_07_08_Expected_interactions_coreclock_100iter_DynamicFANG.txt", quote = F, sep = "\t", row.names = F, col.names = F)
+write.table(x = Dynamic, file = "inputs_for_scripts/differential_interactions/2020_07_08_Expected_interactions_coreclock_100iter_DynamicFANG.txt", quote = F, sep = "\t", row.names = F, col.names = F)
 
 Static<-do.call(rbind.data.frame, exp_cc_sep_belowaboveFANG[3,])
 colnames(Static)<-NULL
-write.table(x = Static, file = "inputs_for_scripts/differential_interactions/MFM_RNAseq/Core_clock/2020_07_06_Expected_interactions_coreclock_100iter_StaticFANG.txt", quote = F, sep = "\t", row.names = F, col.names = F)
+write.table(x = Static, file = "inputs_for_scripts/differential_interactions/2020_07_06_Expected_interactions_coreclock_100iter_StaticFANG.txt", quote = F, sep = "\t", row.names = F, col.names = F)
 
 ####Count interactions per circproms for fang
 
