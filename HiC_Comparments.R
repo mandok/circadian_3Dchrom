@@ -13,7 +13,7 @@ library(ggplot2)
 library(reshape2)
 library(hexbin)
 library(gridExtra)
-setwd("HiC_analysis_Babraham/Juicebox/")
+setwd("inputs_for_scripts/HiC/Compartments/")
 #readRDS("ZT0All_step2.Rds")
 #setwd("/hdisk7/mandok/Temporal/HiC")
 eig_06<-read.csv("ZT06sharedbins100kbeigenKR.bed", header = F, sep="\t", colClasses=c("NULL","NULL","NULL", NA, NA))
@@ -105,14 +105,14 @@ smoothScatter(eig_1218[,1], eig_1218[,2],
 ######################3
 ####Heatmaps
 #Merged replicates
-eig_061218<-read.csv("HiC_analysis_Babraham/Juicebox/Compartment_changes/Mergedreplicates_Comparmentschanges_ZT061218sharedbins100kbeigenKR_allcombinations", header = F, sep="\t", colClasses=c("NULL","NULL","NULL", NA, NA, NA, NA))
+eig_061218<-read.csv("inputs_for_scripts/HiC/Compartments/Mergedreplicates_Comparmentschanges_ZT061218sharedbins100kbeigenKR_allcombinations", header = F, sep="\t", colClasses=c("NULL","NULL","NULL", NA, NA, NA, NA))
 colnames(eig_061218)<-c("ZT0", "ZT6", "ZT12", "ZT18")
 #svglite::svglite("/Users/andoku01/Dropbox (Cambridge University)/IFC/Figures2_Masami/HiC/Compartments/Mergedreplicates_changesincompartments.svg")
 heatmap.2(as.matrix(eig_061218), key.xlab = "PCA1", key.title = "", Colv = F, trace="none", main="Compartment", density.info="none",col = colorRampPalette(c("blue","white","red")), labRow = NA)
 #dev.off()
 
 #Separated replicates
-eig_061218<-read.csv("/Users/andoku01/Dropbox (Personal)/Masami/HiC_analysis_Babraham/Juicebox/Compartment_NOchanges/NochangesZT061218REPLICATESsharedbins100kbeigenKR.bed", header = F, sep="\t", colClasses=c("NULL","NULL","NULL", NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA))
+eig_061218<-read.csv("inputs_for_scripts/HiC/Compartments/NochangesZT061218REPLICATESsharedbins100kbeigenKR.bed", header = F, sep="\t", colClasses=c("NULL","NULL","NULL", NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA))
 colnames(eig_061218)<-c("ZT0A","ZT0B", "ZT0C",  "ZT6A","ZT6B", "ZT6C", "ZT12A","ZT12B", "ZT12C","ZT18A","ZT18B", "ZT18C")
 #svglite::svglite("/Users/andoku01/Dropbox (Cambridge University)/IFC/Figures2_Masami/HiC/Compartments/Replicatesseparated_nochangesincompartments.svg")
 heatmap.2(as.matrix(eig_061218), key.xlab = "PCA1", key.title = "", Colv = F, trace="none", main="Compartment", density.info="none",col = colorRampPalette(c("blue","white","red")), labRow = NA)
@@ -131,7 +131,7 @@ heatmap.2(as.matrix(t2), key.xlab = "PCA1", key.title = "", Colv = F, trace="non
 ####################################################################################
 ######################ANOVA
 #Static Merged replicates---------------------------------------------------------------
-eig_061218<-read.csv("/Users/andoku01/Dropbox (Personal)/Masami/HiC_analysis_Babraham/Juicebox/Compartment_NOchanges/NochangesZT061218sharedbins100kbeigenKR.bed", header = F, sep="\t", colClasses=c("NULL","NULL","NULL", NA, NA, NA, NA))
+eig_061218<-read.csv("inputs_for_scripts/HiC/Compartments/NochangesZT061218sharedbins100kbeigenKR.bed", header = F, sep="\t", colClasses=c("NULL","NULL","NULL", NA, NA, NA, NA))
 colnames(eig_061218)<-c("ZT0", "ZT6", "ZT12", "ZT18")
 
 eig_061218anova<-as.data.frame(rbind(cbind(eig_061218[,1], colnames(eig_061218)[1]),
@@ -161,7 +161,7 @@ kruskal.test(pca1 ~ timepoint, data = eig_061218anova)
 #Kruskal-Wallis chi-squared = 3.7245, df = 3, p-value = 0.2928
 
 #CCC Merged replicates---------------------------------------------------------------
-eig_061218<-read.csv("/Users/andoku01/Dropbox (Personal)/Masami/HiC_analysis_Babraham/Juicebox/Compartment_changes/Mergedreplicates_Comparmentschanges_ZT061218sharedbins100kbeigenKR_allcombinations", header = F, sep="\t", colClasses=c("NULL","NULL","NULL", NA, NA, NA, NA))
+eig_061218<-read.csv("inputs_for_scripts/HiC/Compartments/Mergedreplicates_Comparmentschanges_ZT061218sharedbins100kbeigenKR_allcombinations", header = F, sep="\t", colClasses=c("NULL","NULL","NULL", NA, NA, NA, NA))
 colnames(eig_061218)<-c("ZT0", "ZT6", "ZT12", "ZT18")
 
 eig_061218anova<-as.data.frame(rbind(cbind(eig_061218[,1], colnames(eig_061218)[1]),
@@ -183,7 +183,7 @@ res.aov <- aov(pca1 ~ timepoint, data = eig_061218anova)
 plot(res.aov, 2)
 #####
 #Static Separate replicates---------------------------------------------------------------
-eig_061218<-read.csv("HiC_analysis_Babraham/Juicebox/Compartment_NOchanges/NochangesZT061218REPLICATESsharedbins100kbeigenKR.bed", header = F, sep="\t", colClasses=c("NULL","NULL","NULL", NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA))
+eig_061218<-read.csv("inputs_for_scripts/HiC/Compartments/NochangesZT061218REPLICATESsharedbins100kbeigenKR.bed", header = F, sep="\t", colClasses=c("NULL","NULL","NULL", NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA))
 colnames(eig_061218)<-c("ZT0A","ZT0B", "ZT0C",  "ZT6A","ZT6B", "ZT6C", "ZT12A","ZT12B", "ZT12C","ZT18A","ZT18B", "ZT18C")
 
 eig_061218anova<-as.data.frame(rbind(cbind(eig_061218[,1], "ZT0", "A"),
@@ -222,7 +222,7 @@ kruskal.test(pca1 ~ timepoint, data = eig_061218anova)
 #Kruskal-Wallis chi-squared = 3.7245, df = 3, p-value = 0.2928
 
 #CCC Merged replicates---------------------------------------------------------------
-eig_061218<-read.csv("/Users/andoku01/Dropbox (Personal)/Masami/HiC_analysis_Babraham/Juicebox/Compartment_changes/ZT061218replicates_changeincompartments_allcombinations", header = F, sep="\t", colClasses=c("NULL","NULL","NULL", NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA))
+eig_061218<-read.csv("inputs_for_scripts/HiC/Compartments/ZT061218replicates_changeincompartments_allcombinations", header = F, sep="\t", colClasses=c("NULL","NULL","NULL", NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA))
 colnames(eig_061218)<-c("ZT0A","ZT0B", "ZT0C",  "ZT6A","ZT6B", "ZT6C", "ZT12A","ZT12B", "ZT12C","ZT18A","ZT18B", "ZT18C")
 
 eig_061218anova<-as.data.frame(rbind(cbind(eig_061218[,1], "ZT0", "A"),
