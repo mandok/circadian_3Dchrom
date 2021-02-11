@@ -13,7 +13,7 @@ chic_bait_bed<-GRanges(seqnames= Rle(chic_baits[,1]), ranges = IRanges(chic_bait
 ##Overlap of eRNAs per phases
 
 #open ernas data. Fang 2014
-osc_ernas<-read.csv("eRNAs_de_novo_oscillating_phases.txt", header = T, sep = "\t")
+osc_ernas<-read.csv("/inputs_for_scripts/eRNAs_de_novo_oscillating_phases.txt", header = T, sep = "\t")
 
 #Group per phases
 #List of the phases
@@ -114,7 +114,7 @@ circprom_divided_list<-lapply(phases, function(x){
   tempo1<-circpromphases[circpromphases[,5]==x[1],]
   tempo2<-circpromphases[circpromphases[,5]==x[2],]
   tempo3<-circpromphases[circpromphases[,5]==x[3],]
-  tempo4<-circpromphases[circpromphases[,5]==x[5],]
+  tempo4<-circpromphases[circpromphases[,5]==x[4],]
   tempo5<-rbind(tempo1, tempo2, tempo3, tempo4)
   return(tempo5)
 })
@@ -124,7 +124,7 @@ circpromINTRONS_divided_list<-lapply(phases, function(x){
   tempo1<-circpromphasesINTRONS[circpromphasesINTRONS[,5]==x[1],]
   tempo2<-circpromphasesINTRONS[circpromphasesINTRONS[,5]==x[2],]
   tempo3<-circpromphasesINTRONS[circpromphasesINTRONS[,5]==x[3],]
-  tempo4<-circpromphasesINTRONS[circpromphasesINTRONS[,5]==x[5],]
+  tempo4<-circpromphasesINTRONS[circpromphasesINTRONS[,5]==x[4],]
   tempo5<-rbind(tempo1, tempo2, tempo3, tempo4)
   return(tempo5)
 })
@@ -260,7 +260,6 @@ names(bothphases_circadianpromintrons_ernas_counts)<-circpromlistintrons_phases
 #Create files of pairs circproms-osceRNAs diurnal and nocturnal
 
 #Compare each circadian promoter vs all the ernas_phases,
-#Rerun chunk in line 104
 bothphases_circadianprom_ernas_counts<-
   lapply(circpromlist_phases, function(y){# each circprom
     tempo_circ<-get(y);
@@ -501,12 +500,12 @@ p4<-ggplot(melt(t), aes(x=Var1, y=value, fill=Var2))+geom_bar(width = 1, stat = 
 grid.arrange(p1, p2, p3, p4)
 
 ###Control randompicked, use no osc eRNAs
-poolofenas<-bedfile(read.csv("/Users/andoku01/Dropbox/Lab_IFC_Mayra/eRNAs/eRNAs_de_novo_oscillating.txt", header = T, sep = "\t"), columnnames)
-noosc_ernas<-poolofenas[!(1:19086 %in% queryHits(findOverlaps(poolofenas, (osc_ernas), type="equal")))]
+poolofenas<-bedfile(read.csv("/inputs_for_scripts/eRNAs_de_novo_oscillating.txt", header = T, sep = "\t"), columnnames)
+noosc_ernas<-poolofenas[!(1:19086 %in% queryHits(findOverlaps(poolofenas, (osc_ernas))))]
 
 #Retrieve non circadian promoters, 
 #First retrieve only baits
-onlybaits<-bedfile(read.csv("/Baits_Gen_Res/Baits.txt", header = T, sep="\t"), columnnames)
+onlybaits<-bedfile(read.csv("/inputs_for_scripts/Baits.txt", header = T, sep="\t"), columnnames)
 t<-chic_bait_bed[unique(queryHits(findOverlaps(chic_bait_bed, onlybaits)))]
 noncircproms<-t[!(1:247943 %in% queryHits(findOverlaps(t,bedfile(circpromphases))))]
 #247943 289336
