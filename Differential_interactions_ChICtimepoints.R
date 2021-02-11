@@ -1,7 +1,7 @@
 #####################---Differential interactions---##########
 #######Open data
 #Open eRNAs
-osc_ernas<-read.csv("eRNAs_de_novo_oscillating_phases.txt", header = T, sep = "\t")
+osc_ernas<-read.csv("/inputs_for_scripts/eRNAs_de_novo_oscillating_phases.txt", header = T, sep = "\t")
 
 #Divide per phases
 phases<-unique(osc_ernas[,19])
@@ -39,11 +39,11 @@ list_ernasperphase_bed<-lapply(list_ernasperphase, function(x){
 #Open circproms
 
 
-circpromphases<-read.csv("inputs_for_scripts/circproms/Updated/HindIIIfragments_circadiangenes_MFMRNAseq_phases.bed", header = F, sep="\t")
+circpromphases<-read.csv("inputs_for_scripts/circproms/HindIIIfragments_circadiangenes_MFMRNAseq_phases.bed", header = F, sep="\t")
 
-circpromphasesINTRONS<-read.csv("inputs_for_scripts/circproms/Updated/HindIIIfragments_circadiangenesonlyintrons_MFMRNAseq_phases.bed", header = F, sep="\t")
+circpromphasesINTRONS<-read.csv("inputs_for_scripts/circproms/HindIIIfragments_circadiangenesonlyintrons_MFMRNAseq_phases.bed", header = F, sep="\t")
 
-fangcircproms<- read.csv("inputs_for_scripts/circproms/Updated/HindIIIfragments_circadiangenes_fang_phases.bed", header = F, sep="\t")
+fangcircproms<- read.csv("inputs_for_scripts/circproms/HindIIIfragments_circadiangenes_fang_phases.bed", header = F, sep="\t")
 fangcircproms<-fangcircproms[,-4]
 
 #Divide per phases
@@ -220,11 +220,11 @@ difinteractions_updown<-function(inter_table){
 #6.1) Apply function
 load("inputs_for_scripts/circtablesinter")
 #1) Filter only interactions with a circadian promoter, only work with reads
-mfm_mrnas<-bedfile(read.csv("inputs_for_scripts/circproms/MFM_RNAseq/HindIIIfragments_circadiangenes_MFMRNAseq_phases.bed", header = F, sep = "\t"))
+mfm_mrnas<-bedfile(read.csv("inputs_for_scripts/circproms/HindIIIfragments_circadiangenes_MFMRNAseq_phases.bed", header = F, sep = "\t"))
 
 mfm_intronsmrnas<-bedfile(read.csv("inputs_for_scripts/circproms/MFM_RNAseq/HindIIIfragments_circadiangenesonlyintrons_MFMRNAseq_phases.bed", header = F, sep = "\t"))
 
-fang_mrnas<-bedfile(read.csv("inputs_for_scripts/circproms/Updated/HindIIIfragments_circadiangenes_fang_phases.bed", header = F, sep = "\t"))
+fang_mrnas<-bedfile(read.csv("inputs_for_scripts/circproms/HindIIIfragments_circadiangenes_fang_phases.bed", header = F, sep = "\t"))
 
 #Make symmertic? NO
 intmerged_baits_bed<-GRanges(seqnames= Rle(circadian_tableinteractions[,1]), ranges = IRanges(circadian_tableinteractions[,2], circadian_tableinteractions[,3]))
@@ -268,14 +268,14 @@ diffs_readcount_above150kbFANG<-difinteractions_updown(circadian_tableinteractio
 
 
 #Save as objects. 
-save(diffs_readcount_above150kb, file = "inputs_for_scripts/differential_interactions/MFM_RNAseq/MFMcircproms_diffs_readcount_above150kb2018")
-save(diffs_readcount_below150kb, file = "inputs_for_scripts/differential_interactions/MFM_RNAseq/MFMcircproms_diffs_readcount_below150kb2018")
+save(diffs_readcount_above150kb, file = "inputs_for_scripts/differential_interactions/MFMcircproms_diffs_readcount_above150kb2018")
+save(diffs_readcount_below150kb, file = "inputs_for_scripts/differential_interactions/MFMcircproms_diffs_readcount_below150kb2018")
 
-save(diffs_readcount_above150kbINTRONS , file = "inputs_for_scripts/differential_interactions/MFM_RNAseq/MFMcircproms_diffs_readcount_above150kb2020INTRONS")
-save(diffs_readcount_below150kbINTRONS, file = "inputs_for_scripts/differential_interactions/MFM_RNAseq/MFMcircproms_diffs_readcount_below150kb2020INTRONS")
+save(diffs_readcount_above150kbINTRONS , file = "inputs_for_scripts/differential_interactions/MFMcircproms_diffs_readcount_above150kb2020INTRONS")
+save(diffs_readcount_below150kbINTRONS, file = "inputs_for_scripts/differential_interactions/MFMcircproms_diffs_readcount_below150kb2020INTRONS")
 
-save(diffs_readcount_above150kbFANG , file = "inputs_for_scripts/differential_interactions/MFM_RNAseq/MFMcircproms_diffs_readcount_above150kb2020FANG")
-save(diffs_readcount_below150kbFANG, file = "inputs_for_scripts/differential_interactions/MFM_RNAseq/MFMcircproms_diffs_readcount_below150kb2020FANG")
+save(diffs_readcount_above150kbFANG , file = "inputs_for_scripts/differential_interactions/MFMcircproms_diffs_readcount_above150kb2020FANG")
+save(diffs_readcount_below150kbFANG, file = "inputs_for_scripts/differential_interactions/MFMcircproms_diffs_readcount_below150kb2020FANG")
 
 #load("inputs_for_scripts/differential_interactions/MFM_RNAseq/MFMcircproms_diffs_readcount_above150kb2018")
 #load("inputs_for_scripts/differential_interactions/MFM_RNAseq/MFMcircproms_diffs_readcount_below150kb2018")
@@ -628,10 +628,10 @@ countinter_circpromsFANGperphasedifinters<-countintersfromchics(ZT0, ZT6, ZT12, 
 names(countinter_circpromsFANGperphasedifinters)<-c("ZT0", "ZT6", "ZT12", "ZT18") 
 
 #Export lists
-write.table(countinter_circpromsperphasedifinters[[1]], "inputs_for_scripts/differential_interactions/MFM_RNAseq/tablecount_interactionscircpromsZT0dectectedindifinters.txt", quote = F, sep = "\t")
-write.table(countinter_circpromsperphasedifinters[[2]], "inputs_for_scripts/differential_interactions/MFM_RNAseq/tablecount_interactionscircpromsZT6dectectedindifinters.txt", quote = F, sep = "\t")
-write.table(countinter_circpromsperphasedifinters[[3]], "inputs_for_scripts/differential_interactions/MFM_RNAseq/tablecount_interactionscircpromsZT12dectectedindifinters.txt", quote = F, sep = "\t")
-write.table(countinter_circpromsperphasedifinters[[4]], "inputs_for_scripts/differential_interactions/MFM_RNAseq/tablecount_interactionscircpromsZT18dectectedindifinters.txt", quote = F, sep = "\t")
+write.table(countinter_circpromsperphasedifinters[[1]], "inputs_for_scripts/differential_interactions/tablecount_interactionscircpromsZT0dectectedindifinters_2020Sym.txt", quote = F, sep = "\t")
+write.table(countinter_circpromsperphasedifinters[[2]], "inputs_for_scripts/differential_interactions/tablecount_interactionscircpromsZT6dectectedindifinters_2020Sym.txt", quote = F, sep = "\t")
+write.table(countinter_circpromsperphasedifinters[[3]], "inputs_for_scripts/differential_interactions/tablecount_interactionscircpromsZT12dectectedindifinters_2020Sym.txt", quote = F, sep = "\t")
+write.table(countinter_circpromsperphasedifinters[[4]], "inputs_for_scripts/differential_interactions/tablecount_interactionscircpromsZT18dectectedindifinters_2020Sym.txt", quote = F, sep = "\t")
 
 #In which timepoint I can find the max and min per circprom;
 ##ZT0
@@ -753,10 +753,10 @@ countmaxandmins(countinter_eRNAsassociatedwithcircpromsperphasedifinters[[4]])
 
 
 #How many interactions are made in total by the circproms
-ZT0circproms that make differential interactions 183; from these how many interactions are detected in the chicZT0 2492, chicZT6 2531, chicZT12 2607, chicZT18 2699. 
-ZT6circproms that make differential interactions 238
-ZT12circproms that make differential interactions 364
-ZT18circproms that make differential interactions 160; 
+#ZT0circproms that make differential interactions 183; from these how many interactions are detected in the chicZT0 2492, chicZT6 2531, chicZT12 2607, chicZT18 2699. 
+#ZT6circproms that make differential interactions 238
+#ZT12circproms that make differential interactions 364
+#ZT18circproms that make differential interactions 160; 
 
 #-----------------------------------------
 #2018-08-20 Count again the number of enhancers but using the total list
@@ -817,15 +817,15 @@ countmaxandmins(countinter_TOTALeRNAsassociatedwithcircpromsperphasedifinters[[4
 
 
 #How many interactions are made in total by the circproms
-ZT0circproms that make differential interactions 183; from these how many interactions are detected in the chicZT0 2492, chicZT6 2531, chicZT12 2607, chicZT18 2699. 
-ZT6circproms that make differential interactions 238
-ZT12circproms that make differential interactions 364
-ZT18circproms that make differential interactions 160; 
+#ZT0circproms that make differential interactions 183; from these how many interactions are detected in the chicZT0 2492, chicZT6 2531, chicZT12 2607, chicZT18 2699. 
+#ZT6circproms that make differential interactions 238
+#ZT12circproms that make differential interactions 364
+#ZT18circproms that make differential interactions 160; 
 
 #-----------------------------------------
 #2018-08-20 Filter only the core clock genes and report all the min/max counts :)
 #1) Open core clock genes; #25 gene list and divide per phases
-coreclock<-read.csv("core_clock_genes/Core_clock_short_fragments.txt", header = T, sep = "\t")
+coreclock<-read.csv("inputs_for_scripts/Core_clock_short_fragments.txt", header = T, sep = "\t")
 coreclock[,1]<-paste("chr", coreclock[,1], sep = "")
 coreclock<-makeGRangesFromDataFrame(coreclock, keep.extra.columns = T)
 
@@ -996,10 +996,6 @@ countmaxandmins(countinter_eRNAsassociatedwithcircpromsINTRONSperphasedifinters[
 
 
 
-#Skip
-#9.2 Export list of interactions, circprom-oscenh
-
-
 #9.2 Export list of interactions, circprom-oscenh
 
 
@@ -1047,150 +1043,9 @@ v1<-rbind(cbind(as.character(levels(v1[,1][[1]]))[v1[,1][[1]]], v1[,1][[2]], v1[
 
 v2<-rbind(cbind(as.character(levels(v2[,1][[1]]))[v2[,1][[1]]], v2[,1][[2]], v2[,1][[3]],as.character(levels(v2[,1][[4]]))[v2[,1][[4]]], v2[,1][[5]], v2[,1][[6]]),cbind(as.character(levels(v2[,2][[1]]))[v2[,2][[1]]], v2[,2][[2]], v2[,2][[3]],as.character(levels(v2[,2][[4]]))[v2[,2][[4]]], v2[,2][[5]], v2[,2][[6]]), cbind(as.character(levels(v2[,3][[1]]))[v2[,3][[1]]], v2[,3][[2]], v2[,3][[3]], as.character(levels(v2[,3][[4]]))[v2[,3][[4]]], v2[,3][[5]], v2[,3][[6]]),cbind(as.character(levels(v2[,4][[1]]))[v2[,4][[1]]], v2[,4][[2]],v2[,4][[3]],as.character(levels(v2[,4][[4]]))[v2[,4][[4]]], v2[,4][[5]], v2[,4][[6]]))
 
-setwd("/hdisk7/mandok/")
-write.table(unique(v1),"inputs_for_scripts/differential_interactions/MFM_RNAseq/MFMcircproms_promenhdiffinter_above150kb.bedpe",quote=F,sep="\t",row.names=F,col.names=F) 
-write.table(unique(v2),"inputs_for_scripts/differential_interactions/MFM_RNAseq/MFMcircproms_promenhdiffinter_below150kb.bedpe",quote=F,sep="\t",row.names=F,col.names=F) 
-
-
-#9.2.1 Export list of interactions, circprom-circprom 2019-01-14
-
-
-#9.2.1 Export list of interactions, circprom-circprom 2019-01-14
-
-
-phasecor_diffinteralltimepoints_pp_positionspairs<-function(intertableall, list_circproms){
-  grangesconservedinalltimepoints_B<-GRanges(seqnames = intertableall[,1], ranges = IRanges(intertableall[,2], intertableall[,3]))
-  
-  grangesconservedinalltimepoints_OE<-GRanges(seqnames = intertableall[,4], ranges = IRanges(intertableall[,5], intertableall[,6]))
-      
-    c3<-sapply(1:4, function(x){
-      index<-findOverlaps(grangesconservedinalltimepoints_OE, list_circpromsperphase_bed[[x]])
-      mcols(list_circpromsperphase_bed[[x]][subjectHits(index)])
-      t3<-sapply(1:4, function(y){
-        index2<-findOverlaps(grangesconservedinalltimepoints_B[queryHits(index)], list_circpromsperphase_bed[[y]])
-      t1<-grangesconservedinalltimepoints_OE[[subjectHits(index)[queryHits(index2)]],]
-      t2<-grangesconservedinalltimepoints_B[subjectHits(index2),]
-      return(cbind(as.data.frame(t2), as.data.frame(t1)))
-
-         })
-      t4<-rbind(t3[[1]], t3[[2]], t3[[3]], t3[[4]])
-      return(t4)
-        })
-     c4<-rbind(c3[[1]], c3[[2]], c3[[3]], c3[[4]])
-    return(c4)
-}
-
-
-phasecor_diffinteralltimepoints_pp_positionspairs<-function(intertableall){ grangesconservedinalltimepoints_B<-GRanges(seqnames = intertableall[,1], ranges = IRanges(intertableall[,2], intertableall[,3]))
-  
-  grangesconservedinalltimepoints_OE<-GRanges(seqnames = intertableall[,4], ranges = IRanges(intertableall[,5], intertableall[,6]))
-      
-    c3<-sapply(1:4, function(x){
-      index<-findOverlaps(grangesconservedinalltimepoints_OE, list_ernasperphase_bed_mod[[x]])
-      mcols(list_ernasperphase_bed_mod[[x]][subjectHits(index)])
-      index2<-findOverlaps(grangesconservedinalltimepoints_B[queryHits(index)], list_circpromsperphase_bed[[x]])
-      t1<-list_ernasperphase_bed_mod[[x]][subjectHits(index)[queryHits(index2)]]
-      t2<-list_circpromsperphase_bed[[x]][subjectHits(index2)]
-      return(cbind(as.character(levels(as.data.frame(t2)[,1]))[as.data.frame(t2)[,1]], as.data.frame(t2)[,2:3],as.character(levels(as.data.frame(t1)[,1]))[as.data.frame(t1)[,1]], as.data.frame(t1)[,2:3]))
-      })
-    return(c3)
-}
-v1<-phasecor_diffinteralltimepoints_pe_positionspairs(allreadsabove_difinter_timepoint, list_circpromsperphaseFANG_bed_mod)
-v2<-phasecor_diffinteralltimepoints_pe_positionspairs(allreadsbelow_difinter_timepoint)
-#1-3 only circproms, if 4-6 cols they would be th ernas
-v1<-rbind(cbind(as.character(levels(v1[,1][[1]]))[v1[,1][[1]]], v1[,1][[2]], v1[,1][[3]],as.character(levels(v1[,1][[4]]))[v1[,1][[4]]], v1[,1][[5]], v1[,1][[6]]),cbind(as.character(levels(v1[,2][[1]]))[v1[,2][[1]]], v1[,2][[2]], v1[,2][[3]],as.character(levels(v1[,2][[4]]))[v1[,2][[4]]], v1[,2][[5]], v1[,2][[6]]), cbind(as.character(levels(v1[,3][[1]]))[v1[,3][[1]]], v1[,3][[2]], v1[,3][[3]], as.character(levels(v1[,3][[4]]))[v1[,3][[4]]], v1[,3][[5]], v1[,3][[6]]),cbind(as.character(levels(v1[,4][[1]]))[v1[,4][[1]]], v1[,4][[2]],v1[,4][[3]],as.character(levels(v1[,4][[4]]))[v1[,4][[4]]], v1[,4][[5]], v1[,4][[6]]))
-
-v2<-rbind(cbind(as.character(levels(v2[,1][[1]]))[v2[,1][[1]]], v2[,1][[2]], v2[,1][[3]],as.character(levels(v2[,1][[4]]))[v2[,1][[4]]], v2[,1][[5]], v2[,1][[6]]),cbind(as.character(levels(v2[,2][[1]]))[v2[,2][[1]]], v2[,2][[2]], v2[,2][[3]],as.character(levels(v2[,2][[4]]))[v2[,2][[4]]], v2[,2][[5]], v2[,2][[6]]), cbind(as.character(levels(v2[,3][[1]]))[v2[,3][[1]]], v2[,3][[2]], v2[,3][[3]], as.character(levels(v2[,3][[4]]))[v2[,3][[4]]], v2[,3][[5]], v2[,3][[6]]),cbind(as.character(levels(v2[,4][[1]]))[v2[,4][[1]]], v2[,4][[2]],v2[,4][[3]],as.character(levels(v2[,4][[4]]))[v2[,4][[4]]], v2[,4][[5]], v2[,4][[6]]))
-
 
 write.table(unique(v1),"inputs_for_scripts/differential_interactions/MFM_RNAseq/MFMcircproms_promenhdiffinter_above150kb.bedpe",quote=F,sep="\t",row.names=F,col.names=F) 
 write.table(unique(v2),"inputs_for_scripts/differential_interactions/MFM_RNAseq/MFMcircproms_promenhdiffinter_below150kb.bedpe",quote=F,sep="\t",row.names=F,col.names=F) 
-
-
-# 9.3 Correlation indicating the timepoint where the interactions is stronger
-
-
-#9.3 Correlation indicating the timepoint where the interactions is stronger
-
-merge_uniquedifinter_updowntimepoint<-function(tablecircadianinteractions, outputadamscript){
- sapply(1:2, function(updown){
-   t1<-cbind(tablecircadianinteractions[as.numeric(rownames(outputadamscript[[1]][[updown]])),], "Timepoint"=c(0, 6)[updown])
-   t2<-cbind(tablecircadianinteractions[as.numeric(rownames(outputadamscript[[2]][[updown]])),], "Timepoint"=c(0, 12)[updown])
-   t3<-cbind(tablecircadianinteractions[as.numeric(rownames(outputadamscript[[3]][[updown]])),], "Timepoint"=c(0, 18)[updown])
-   t4<-cbind(tablecircadianinteractions[as.numeric(rownames(outputadamscript[[4]][[updown]])),], "Timepoint"=c(6, 12)[updown])
-   t5<-cbind(tablecircadianinteractions[as.numeric(rownames(outputadamscript[[5]][[updown]])),], "Timepoint"=c(6, 18)[updown])
-   t6<-cbind(tablecircadianinteractions[as.numeric(rownames(outputadamscript[[6]][[updown]])),], "Timepoint"=c(12, 18)[updown])
-   alldiffinter<-rbind(t1, t2, t3, t4, t5, t6)
-   return(alldiffinter)
- })
- #alldiffinter<-unique(alldiffinter[order(alldiffinter$V1, alldiffinter$V2, alldiffinter$V3, alldiffinter$V4, alldiffinter$V5, alldiffinter$V6),])
-}
- 
-#>150kb
-allreadsabove_difinter_timepoint<-merge_uniquedifinter_updowntimepoint(circadian_tableinteractions, diffs_readcount_above150kb)
-allreadsabove_difinter_timepoint<-rbind(as.data.frame(allreadsabove_difinter_timepoint[,1]), as.data.frame(allreadsabove_difinter_timepoint[,2]))#transform into one large data frame
-allreadsabove_difinter_timepoint<-unique(allreadsabove_difinter_timepoint[order(allreadsabove_difinter_timepoint$V1, allreadsabove_difinter_timepoint$V2, allreadsabove_difinter_timepoint$V3, allreadsabove_difinter_timepoint$V4, allreadsabove_difinter_timepoint$V5, allreadsabove_difinter_timepoint$V6),]) #unique interactions
-#<150kb
-allreadsbelow_difinter_timepoint<-merge_uniquedifinter_updowntimepoint(circadian_tableinteractions, diffs_readcount_below150kb)
-allreadsbelow_difinter_timepoint<-rbind(as.data.frame(allreadsbelow_difinter_timepoint[,1]), as.data.frame(allreadsbelow_difinter_timepoint[,2]))#transform into one large data frame
-allreadsbelow_difinter_timepoint<-unique(allreadsbelow_difinter_timepoint[order(allreadsbelow_difinter_timepoint$V1, allreadsbelow_difinter_timepoint$V2, allreadsbelow_difinter_timepoint$V3, allreadsbelow_difinter_timepoint$V4, allreadsbelow_difinter_timepoint$V5, allreadsbelow_difinter_timepoint$V6),]) #unique interactions
-
-#Export data
-write.table(allreadsabove_difinter_timepoint,"inputs_for_scripts/differential_interactions/MFM_RNAseq/MFMcircproms_alldiffinter_above150kb.bedpe",quote=F,sep="\t",row.names=F,col.names=F) 
-write.table(allreadsbelow_difinter_timepoint,"inputs_for_scripts/differential_interactions/MFM_RNAseq/MFMcircproms_alldiffinter_below150kb.bedpe",quote=F,sep="\t",row.names=F,col.names=F) 
-
-phasecor_diffinteralltimepoints_pe_vectorphases_timepoint<-function(intertableall){
-  grangesconservedinalltimepoints_B<-GRanges(seqnames = intertableall[,1], ranges = IRanges(intertableall[,2], intertableall[,3]), "Timepoint"=intertableall[,11])
-  
-  grangesconservedinalltimepoints_OE<-GRanges(seqnames = intertableall[,4], ranges = IRanges(intertableall[,5], intertableall[,6]),  "Timepoint"=intertableall[,11])
-      
-    c3<-sapply(1:4, function(x){
-      index<-findOverlaps(grangesconservedinalltimepoints_OE, list_ernasperphase_bed_mod[[x]])
-      #mcols(list_ernasperphase_bed_mod[[x]][subjectHits(index)])
-      index2<-findOverlaps(grangesconservedinalltimepoints_B[queryHits(index)], list_circpromsperphase_bed_mod[[x]])
-      t1<-mcols(list_ernasperphase_bed_mod[[x]][subjectHits(index)[queryHits(index2)]])
-      t2<-mcols(list_circpromsperphase_bed_mod[[x]][subjectHits(index2)])
-      t3<-mcols(grangesconservedinalltimepoints_B[queryHits(index)][queryHits(index2)] )
-      return(cbind(as.data.frame(t1)[,1], as.data.frame(t2)[,1], as.data.frame(t3)[,1]))
-      })
-    return(c3)
-}
-
-vv1<-phasecor_diffinteralltimepoints_pe_vectorphases_timepoint(allreadsabove_difinter_timepoint)
-vv1<-rbind(vv1[[1]], vv1[[2]], vv1[[3]], vv1[[4]])
-
-vv2<-phasecor_diffinteralltimepoints_pe_vectorphases_timepoint(allreadsbelow_difinter_timepoint)
-vv2<-rbind(vv2[[1]], vv2[[2]], vv2[[3]], vv2[[4]])
-
-#Heatmaps
-my_palette <- colorRampPalette(c("black","blue"))(n = 51)
-
-#there are only 61 circadian promoters shared in all the timepoints
-heatmap.2(as.matrix(allreadsabove_difinter_timepoint[,7:10]), trace = "none", density.info = "none", dendrogram="row",labRow =  "", key.title = "", key.xlab = "Reads", labCol  = c("ZT0", "ZT6", "ZT12", "ZT18"), xlab="" ,col = colorRampPalette(c("white", "dodgerblue2"), 50), breaks = seq(0,50, 1), Colv="NA", main= paste(">150kb n=", as.character(dim(allreadsabove_difinter_timepoint)[1]), sep = ""))
-
-heatmap.2(as.matrix(allreadsbelow_difinter_timepoint[,7:10]), trace = "none", density.info = "none", dendrogram="row",labRow =  "", labCol  = c("ZT0", "ZT6", "ZT12", "ZT18"), xlab="" , Colv="NA", main=  paste("<150kb n=", as.character(dim(allreadsbelow_difinter_timepoint)[1]), sep = ""),  key.title = "", key.xlab = "Reads",col = colorRampPalette(c("white", "dodgerblue2"), 50), breaks = seq(0,50, 1))
-
-
-
-
-
-
-#Plot 
-#Plots
-#cor(v1[,1], v1[,2], method = "pearson")
-#cor(v2[,1], v2[,2], method = "pearson")
-colnames(vv1)<-c("Circadian promoters", "Oscillatory eRNAs", "HiC Timepoint")
-colnames(vv2)<-c("Circadian promoters", "Oscillatory eRNAs", "HiC Timepoint")
-p1<-ggplot(melt(vv1), aes(x=Var1, y=value, group=Var2, col=Var2))+geom_line(aes(linetype=Var2))+xlab("Pair prom-enh")+ylab("Phase")+theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 12), axis.text.y = element_text(size = 12),axis.title.x = element_text(size=12), axis.title.y=element_text(size=12), legend.title=element_blank(), legend.text =  element_text(size=12),  legend.position="none")+ scale_colour_brewer(palette="Dark2")+  annotate("text", x =3, y = 22, label ="")+ggtitle("> 150 Kb Alldifinter")+scale_linetype_manual(values = c(1,1,3))+theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-panel.background = element_blank(), axis.line = element_line(colour = "black"))
-p2<-ggplot(melt(vv2), aes(x=Var1, y=value, group=Var2, col=Var2))+geom_line(aes(linetype=Var2))+xlab("Pair prom-enh")+ylab("Phase")+theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 12), axis.text.y = element_text(size = 12),axis.title.x = element_text(size=12), axis.title.y=element_text(size=12), legend.title=element_blank(), legend.text =  element_text(size=12), legend.justification=c(1,0), legend.position=c(1,0))+ scale_colour_brewer(palette="Dark2")+  annotate("text", x = 15, y = 22, label ="")+ggtitle("< 150 Kb Alldifinter")+scale_linetype_manual(values = c(1,1,3))+theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-panel.background = element_blank(), axis.line = element_line(colour = "black"))
-
-tiff("Figures/Paper/Differential interactions/Correction_of_circproms/Corphases_allinteractions_HiCtimepoint.tiff",height = 10, width = 25, units = 'cm', compression = "lzw", res = 300)
-grid.arrange(p1,p2, ncol=2)
-dev.off()
-
-
 
 
 ###############3
@@ -1284,7 +1139,7 @@ countinter_difinters<-countintersfromchics_mod(ZT0, ZT6, ZT12, ZT18, ALLgeneallr
 #names(countinter_difinters)<-c("ZT0", "ZT6", "ZT12", "ZT18") 
 
 #Export lists
-write.table(countinter_difinters, "inputs_for_scripts/differential_interactions/MFM_RNAseq/tablecount_interactionsALLBAITSdifinters.txt", quote = F, sep = "\t")
+write.table(countinter_difinters, "inputs_for_scripts/differential_interactions/tablecount_interactionsALLBAITSdifinters.txt", quote = F, sep = "\t")
 
 #Count proportions
 #To look at all the max and mins counts in all the transcriptional phases :P
@@ -1330,4 +1185,4 @@ t<-unique(rbind(allreadsabove_difinter_timepoint,allreadsbelow_difinter_timepoin
 #Only interactions mediated by circproms# 242920 = 6047
 nondifinterall<-(anti_join(circadian_tableinteractions, t))
 
-write.table(nondifinterall, "inputs_for_scripts/differential_interactions/MFM_RNAseq/MFMcircproms_allNONdiffinter_abovebelow150kb2020includingnotMFMcps.bedpe", quote = F, row.names = F, col.names = F, sep = "\t")
+write.table(nondifinterall, "inputs_for_scripts/differential_interactions/MFMcircproms_allNONdiffinter_abovebelow150kb2020includingnotMFMcps.bedpe", quote = F, row.names = F, col.names = F, sep = "\t")
