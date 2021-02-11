@@ -13,8 +13,9 @@
 
 library(rtracklayer)
 
-load("/inputs_for_scripts/differential_interactions/MFM_RNAseq/MFMcircproms_diffs_readcount_above150kb2018")
-load("/inputs_for_scripts/differential_interactions/MFM_RNAseq/MFMcircproms_diffs_readcount_below150kb2018")
+load("/inputs_for_scripts/differential_interactions/MFMcircproms_diffs_readcount_above150kb2018")
+load("/inputs_for_scripts/differential_interactions/MFMcircproms_diffs_readcount_below150kb2018")
+load("/inputs_for_scripts/circtablesinter")
 
 merge_uniquedifinter<-function(tablecircadianinteractions, outputadamscript){
  sapply(1:2, function(updown){
@@ -44,7 +45,41 @@ Baits_diffinter_GR<-(c(makeGRangesFromDataFrame(allreadsbelow_difinter_timepoint
 
 OE_diffinter_GR<-(c(makeGRangesFromDataFrame(allreadsbelow_difinter_timepoint[,4:6], seqnames.field = "V4", start.field = "V5", end.field = "V6"), makeGRangesFromDataFrame(allreadsabove_difinter_timepoint[,4:6], seqnames.field = "V4", start.field = "V5", end.field = "V6") ))
 ----------------------------------
- 
+#Load osceRNAs
+osc_ernas<-read.csv("/inputs_for_scripts/eRNAs_de_novo_oscillating_phases.txt", header = T, sep = "\t")
+
+#Group per phases
+#List of the phases
+phases<-unique(osc_ernas[,19])
+#Binning per 3 hours
+phases_bin<-split(phases, ceiling(seq_along(phases)/3))
+
+#Divide the ernas per phases, create separe variables
+
+ernas_divided_list<-lapply(phases_bin, function(x){
+  tempo1<-osc_ernas[osc_ernas[,19]==x[1],c(1,2,3,8:15, 19)]
+  tempo2<-osc_ernas[osc_ernas[,19]==x[2],c(1,2,3,8:15,19)]
+  tempo3<-osc_ernas[osc_ernas[,19]==x[3],c(1,2,3,8:15,19)]
+  tempo4<-rbind(tempo1, tempo2, tempo3)
+  return(tempo4)
+})
+#8 items in list with the ernas per phase (each 3 hrs)
+#names for the new phases
+phases_bin_names<-sapply(1:8, function(x){paste(phases_bin[[x]][1], phases_bin[[x]][2], phases_bin[[x]][3], sep = "_")})
+
+names(ernas_divided_list) <- paste("df_ernas", phases_bin_names, sep = "")
+list2env(ernas_divided_list , envir = .GlobalEnv)
+remove(ernas_divided_list)
+
+#Transform to Granges objects
+list_ernasperphase<-sapply(mixedsort(ls(pattern = "df_ernas", sorted = F), decreasing = F), function(x){list(x)})
+
+list_ernasperphase_bed<-lapply(list_ernasperphase, function(x){
+  t<-get(x)
+  t1<-GRanges(seqnames= Rle(t[,1]), ranges = IRanges(t[,2], t[,3]), phase=t[,12])
+  return(t1)
+})
+ #------
 #Take a random list everytime 
 #Random no osc ernas
 expbothphases_randompickernas<-sapply(1:100, function(rep){
@@ -138,12 +173,12 @@ colnames(tempoclock_nightRP)<-c("12", "18")
 
 
 ###Control randompicked, use no osc eRNAs
-poolofenas<-bedfile(read.csv("/eRNAs_de_novo_oscillating.txt", header = T, sep = "\t"), columnnames)
+poolofenas<-bedfile(read.csv("/inputs_for_scripts/eRNAs_de_novo_oscillating.txt", header = T, sep = "\t"), columnnames)
 noosc_ernas<-poolofenas[!(1:19086 %in% queryHits(findOverlaps(poolofenas, bedfile(osc_ernas), type="equal")))]
 
 #Retrieve non circadian promoters, 
 #First retrieve only baits
-onlybaits<-bedfile(read.csv("/Baits_Gen_Res/Baits.txt", header = T, sep="\t"), columnnames)
+onlybaits<-bedfile(read.csv("/inputs_for_scripts/Baits.txt", header = T, sep="\t"), columnnames)
 t<-chic_bait_bed[unique(queryHits(findOverlaps(chic_bait_bed, onlybaits)))]
 noncircproms<-t[!(1:247943 %in% queryHits(findOverlaps(t,fang_mrnas)))]
 #247943 289336
