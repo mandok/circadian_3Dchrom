@@ -7,7 +7,7 @@
 #### Open chic merge file s#####
 ################################  
 #I use the symmetrical set
-chic<-read.csv("/inputs_for_scripts/All_step2_washU_text_1.txt", sep = " ", header = F)
+chic<-read.csv("/inputs_for_scripts/All_step2_washU_text_3.txt", sep = "\t", header = F)
 #chic_baits<-read.csv("chic_baits_mm9.txt", sep = "\t", header = F)
 chic_baits<-chic[,1:3]
 #chic_otherends<-read.csv("chic_otherends_mm9.txt", sep = "\t", header = F)
@@ -24,7 +24,7 @@ chic_bait_bed<-GRanges(seqnames= Rle(chic_baits[,1]), ranges = IRanges(chic_bait
 
 #Open circadian promoters
 
-fang_mrnas<-read.csv("/Users/andoku01/Dropbox/Masami/inputs_for_scripts/circproms/MFM_RNAseq/HindIIIfragments_circadiangenes_MFMRNAseq_phases.bed", sep = "\t", header = F)
+fang_mrnas<-read.csv("/inputs_for_scripts/circproms/HindIIIfragments_circadiangenes_MFMRNAseq_phases.bed", sep = "\t", header = F)
 fang_mrnas<-bedfile(fang_mrnas, columnnames)
 circpromlist<-list("fang_mrnas")
 
@@ -34,8 +34,8 @@ circpromlist<-list("fang_mrnas")
 #cirproms
 
 
-circpromphases<-read.csv("/Users/andoku01/Dropbox/Masami/inputs_for_scripts/circproms/MFM_RNAseq/HindIIIfragments_circadiangenes_MFMRNAseq_phases.bed", sep = "\t", header = F)
-circpromphasesINTRONS<-read.csv("/Users/andoku01/Dropbox/Masami/inputs_for_scripts/circproms/MFM_RNAseq/HindIIIfragments_circadiangenesonlyintrons_MFMRNAseq_phases.bed", sep = "\t", header = F)
+circpromphases<-read.csv("/inputs_for_scripts/circproms/HindIIIfragments_circadiangenes_MFMRNAseq_phases.bed", sep = "\t", header = F)
+circpromphasesINTRONS<-read.csv("/inputs_for_scripts/circproms/HindIIIfragments_circadiangenesonlyintrons_MFMRNAseq_phases.bed", sep = "\t", header = F)
 #Divide per phases
 #List of the phases
 #Divide per phases
@@ -291,10 +291,10 @@ n
 #Extra: EXPECTED
 #Repeat 100 times
 #Take a random list everytime; use general list of genes and introns 
-ppgenelist<-read.csv("/inputs_for_scripts/circproms/MFM_RNAseq/HindIIIfragments_circadiangenes_MFMRNAseq_phases.bed", header = F, sep="\t")
-ppgenelist<-read.csv("/inputs_for_scripts/circproms/Updated/HindIIIfragments_circadiangenes_fang_phases.bed", header = F, sep="\t")
+ppgenelist<-read.csv("/inputs_for_scripts/circproms/HindIIIfragments_circadiangenes_MFMRNAseq_phases.bed", header = F, sep="\t")
+ppgenelist<-read.csv("/inputs_for_scripts/circproms/HindIIIfragments_circadiangenes_fang_phases.bed", header = F, sep="\t")
 ppgenelist<-ppgenelist[,-4]
-ppintronslist<-read.csv("/inputs_for_scripts/circproms/MFM_RNAseq/HindIIIfragments_circadiangenesonlyintrons_MFMRNAseq_phases.bed", header = F, sep="\t")
+ppintronslist<-read.csv("/inputs_for_scripts/circproms/HindIIIfragments_circadiangenesonlyintrons_MFMRNAseq_phases.bed", header = F, sep="\t")
 
 #Divide per phases
 #List of the phases
@@ -495,7 +495,7 @@ tempoclock_nightRP<-mean_expbothphases_randompickcircproms1[,3:4]
 rownames(tempoclock_nightRP)<-c("0", "6", "12", "18")
 colnames(tempoclock_nightRP)<-c("12", "18")
 
-#Skip and go to 2274
+
 ####Plot as proportions
 
 #ernas anchor
@@ -536,7 +536,7 @@ p4<-ggplot(melt(t), aes(x=Var1, y=value, fill=Var2))+geom_bar(width = 1, stat = 
 grid.arrange(p1, p2, p3, p4)
 
 ###Control randompicked, use no circ proms
-onlybaits<-bedfile(read.csv("/Users/andoku01/Dropbox/Masami/Baits_Gen_Res/Baits.txt", header = T, sep="\t"), columnnames)
+onlybaits<-bedfile(read.csv("/inputs_for_scripts/Baits.txt", header = T, sep="\t"), columnnames)
 t<-chic_bait_bed[unique(queryHits(findOverlaps(chic_bait_bed, onlybaits)))]
 noncircproms<-t[!(1:247943 %in% queryHits(findOverlaps(t,bedfile(circpromphases))))]
 
